@@ -1,0 +1,81 @@
+import { PoolClient } from "pg";
+import { Status } from "../enums";
+
+const getAllQuery = `SELECT A.id as order_id, A.date as date, B.id as order_product_id, B.quantity as quantity, B.status as status, C.address_line1 as address_line1, C.address_line2 as address_line2, C.city as city, C.state as state, C.pin_code as pin_code, C.mobile_no as mobile_no, 
+D.name as name, D.description as description, D.price as price, D.image_path, D.mimetype, D.size
+FROM orders as A, order_products as B, addresses as C, products as D
+WHERE A.buyer_id = $1 AND B.order_id = A.id AND C.id = A.address_id AND D.id = B.product_id`;
+
+const saveQuery = `INSERT INTO orders(buyer_id, address_id) VALUES($1, $2) RETURNING id`;
+const deleteQuery = `DELETE FROM orders WHERE id=$1 AND buyer_id=$2 RETURNING *`;
+
+export default class Order {
+  private id?: string;
+  private buyer_id?: string;
+  private address_id?: string;
+  private date?: Date;
+
+  constructor({
+    id,
+    buyer_id,
+    address_id,
+    date,
+  }: {
+    id: string;
+    buyer_id: string;
+    address_id: string;
+    date: Date;
+  }) {
+    this.id = id;
+    this.buyer_id = buyer_id;
+    this.address_id = address_id;
+    this.date = date;
+  }
+
+  public get getId(): string {
+    return this.id;
+  }
+
+  public get getBuyerId(): string {
+    return this.buyer_id;
+  }
+
+  public get getAddressId(): string {
+    return this.address_id;
+  }
+
+  public get getDate(): Date {
+    return this.date;
+  }
+
+  public static async getAll(
+    client: PoolClient,
+    buyer_id: string
+  ): Promise<Array<any>> {
+    const result = await client.query(getAllQuery, [buyer_id]);
+    return result.rows;
+  }
+
+  public async save(client: PoolClient): Promise<string> {
+    const result = await client.query(saveQuery, [
+      this.buyer_id,
+      this.address_id,
+    ]);
+    const orderId: string = result.rows[0].id;
+    return orderId;
+  }
+
+  public static async delete(
+    client: PoolClient,
+    orderId: string,
+    buyer_id: string
+  ): Promise<boolean> {
+    const result = await client.query(deleteQuery, [orderId, buyer_id]);
+
+    if (result.rows.length === 0) return null;
+    const orderStatus = result.rows[0].status;
+    if (orderStatus === true) return false;
+
+    return true;
+  }
+}
