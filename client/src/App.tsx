@@ -2,7 +2,7 @@ import { Switch, Route } from "react-router-dom";
 import Wrapper from "./screens/Wrapper";
 import Signin from "./screens/auth/Signin";
 import Signup from "./screens/auth/Signup";
-import Home from "./screens/Home/Home";
+import Home from "./screens/home/Home";
 import { ThemeProvider } from "@mui/material/styles";
 import darkTheme from "./utils/theme";
 function App() {
