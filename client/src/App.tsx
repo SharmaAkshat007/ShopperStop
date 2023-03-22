@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import { Switch, Route } from "react-router-dom";
+import Wrapper from "./screens/Wrapper";
+import Signin from "./screens/auth/Signin";
+import Signup from "./screens/auth/Signup";
+import Home from "./screens/Home/Home";
+import { ThemeProvider } from "@mui/material/styles";
+import darkTheme from "./utils/theme";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <ThemeProvider theme={darkTheme}>
+        <Switch>
+          <Route exact path="/">
+            <Wrapper />
+          </Route>
+          <Route exact path="/signin">
+            <Signin />
+          </Route>
+          <Route exact path="/signup">
+            <Signup />
+          </Route>
+          <Route exact path="/home">
+            <Home />
+          </Route>
+        </Switch>
+      </ThemeProvider>
+    </>
   );
 }
 
