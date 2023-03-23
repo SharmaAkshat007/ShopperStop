@@ -20,14 +20,21 @@ import {
   emailHelper,
   isValidPassword,
 } from "../../utils/sharedFunctions";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+import ErrorBanner from "../../components/ErrorBanner";
+import axios from "axios";
 
 export default function SignUp() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+
+  const [reqError, setReqError] = useState<string>("");
+
+  const history = useHistory();
 
   const checkFirstNameError = (): boolean => {
     return error === errors.firstNameEmpty;
@@ -75,7 +82,7 @@ export default function SignUp() {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (
@@ -85,22 +92,40 @@ export default function SignUp() {
       password.length !== 0 &&
       error === errors.noError
     ) {
-      console.log({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-        error: error,
-      });
+      // console.log({
+      //   firstName: firstName,
+      //   lastName: lastName,
+      //   email: email,
+      //   password: password,
+      //   error: error,
+      // });
+
+      try {
+        const res = await axios.post(
+          `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/auth/signup`,
+          {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: password,
+          }
+        );
+        setReqError("");
+        history.push("/signin");
+      } catch (err: any) {
+        const message: string = err.response.data.message;
+        setReqError(message);
+      }
     }
   };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
+      {reqError.length !== 0 ? <ErrorBanner message={reqError} /> : <></>}
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 5,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -184,11 +209,11 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
-          <Grid container justifyContent="flex-end">
+          <Grid container justifyContent="flex-start">
             <Grid item>
-              <Link href="/signin" variant="body2">
-                Already have an account? Sign in
-              </Link>
+              <RouterLink to="/signin">
+                <Link variant="body2">Already have an account? Sign in</Link>
+              </RouterLink>
             </Grid>
           </Grid>
         </Box>

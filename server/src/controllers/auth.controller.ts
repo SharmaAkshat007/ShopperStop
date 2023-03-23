@@ -162,7 +162,7 @@ const getAccessToken = async (
   return res.json({
     error: false,
     message: "success",
-    data: { access_token, refresh_token },
+    data: [{ access_token, refresh_token }],
   });
 };
 

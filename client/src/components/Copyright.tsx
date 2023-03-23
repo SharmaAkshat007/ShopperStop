@@ -11,7 +11,7 @@ function Copyright(props: any) {
     >
       {"Copyright © "}
       <Link color="inherit" href="#">
-        ShoppingCMS
+        ShoppersStop
       </Link>{" "}
       {new Date().getFullYear()}
     </Typography>

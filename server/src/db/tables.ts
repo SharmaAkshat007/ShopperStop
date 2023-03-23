@@ -1,6 +1,7 @@
 import pool from "./config";
 import Logger from "../utils/logger";
 const query: string = `
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE IF NOT EXISTS users(

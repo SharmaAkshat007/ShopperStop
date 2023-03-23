@@ -12,19 +12,54 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Copyright from "../../components/Copyright";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import errors from "../../utils/error";
 import {
   checkEmailError,
   checkPasswordError,
   emailHelper,
 } from "../../utils/sharedFunctions";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+import ErrorBanner from "../../components/ErrorBanner";
+import axios from "axios";
+import { User, UserContext } from "../../store/UserContext";
 
 export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [reqError, setReqError] = useState<string>("");
+  const [role, setRole] = useState<Array<boolean>>([false, false]);
+  // Global States
+  const { user, setUser } = useContext(UserContext);
+  const history = useHistory();
+
+  const handleBuyer = () => {
+    if (role[0] === true && role[1] === false) {
+      const change = [false, false];
+      setRole(change);
+    } else if (role[0] === false && role[1] === true) {
+      const change = [true, false];
+      setRole(change);
+    } else if (role[0] === false && role[1] === false) {
+      const change = [true, false];
+      setRole(change);
+    }
+  };
+
+  const handleSeller = () => {
+    if (role[0] === true && role[1] === false) {
+      const change = [false, true];
+      setRole(change);
+    } else if (role[0] === false && role[1] === true) {
+      const change = [false, false];
+      setRole(change);
+    } else if (role[0] === false && role[1] === false) {
+      const change = [false, true];
+      setRole(change);
+    }
+  };
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -42,28 +77,68 @@ export default function SignIn() {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (
       email.length !== 0 &&
       password.length !== 0 &&
-      error === errors.noError
+      error === errors.noError &&
+      !(role[0] === false && role[1] === false)
     ) {
-      console.log({
-        email: email,
-        password: password,
-        error: error,
-      });
+      // console.log({
+      //   email: email,
+      //   password: password,
+      //   error: error,
+      // });
+      try {
+        let userRole: string = "";
+        if (role[0] === true) {
+          userRole = "buyer";
+        } else if (role[1] === true) {
+          userRole = "seller";
+        }
+
+        // console.log(userRole);
+        const res = await axios.post(
+          `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/auth/login`,
+          {
+            email: email,
+            password: password,
+            role: userRole,
+          }
+        );
+
+        const currUser: User = {
+          loggedIn: true,
+          firstName: res.data.data[0].firstName,
+          lastName: res.data.data[0].lastName,
+          email: res.data.data[0].email,
+          accessToken: res.data.data[0].access_token,
+          refreshToken: res.data.data[0].refresh_token,
+        };
+
+        // console.log(currUser);
+
+        setReqError("");
+        console.log(user);
+        setUser(currUser);
+        console.log(user);
+        history.push("/home");
+      } catch (err: any) {
+        const message: string = err.response.data.message;
+        setReqError(message);
+      }
     }
   };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
+      {reqError.length !== 0 ? <ErrorBanner message={reqError} /> : <></>}
       <Box
         sx={{
-          marginTop: 8,
+          marginTop: 5,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -102,11 +177,28 @@ export default function SignIn() {
             helperText={checkPasswordError(error) ? error : ""}
             onChange={handlePasswordChange}
           />
+
+          <FormControlLabel
+            control={
+              <Checkbox checked={role[0]} value="show" color="primary" />
+            }
+            label="Buyer *"
+            onClick={handleBuyer}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox checked={role[1]} value="show" color="primary" />
+            }
+            label="Seller *"
+            onClick={handleSeller}
+          />
+          <br />
           <FormControlLabel
             control={<Checkbox value="show" color="primary" />}
             label="Show Password"
             onClick={handleShowPassword}
           />
+
           <Button
             type="submit"
             fullWidth
@@ -117,9 +209,9 @@ export default function SignIn() {
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
+              <RouterLink to="/signup">
+                <Link variant="body2">{"Don't have an account? Sign Up"}</Link>
+              </RouterLink>
             </Grid>
           </Grid>
         </Box>

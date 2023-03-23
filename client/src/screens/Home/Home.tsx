@@ -6,12 +6,25 @@ import Banner from "../../components/Banner";
 import ProductTile from "../../components/ProductTile";
 import Footer from "../../components/Footer";
 
+const sections = [
+  { title: "Mobiles", url: "#" },
+  { title: "Computers", url: "#" },
+  { title: "TV", url: "#" },
+  { title: "Appliances", url: "#" },
+  { title: "Men's Fashion", url: "#" },
+  { title: "Womens's Fashion", url: "#" },
+  { title: "Sports", url: "#" },
+  { title: "Health", url: "#" },
+  { title: "Books", url: "#" },
+  { title: "Toys", url: "#" },
+];
+
 const banner = {
   title: "Buy with us!",
   description: "The most trusted C2C website out there",
   image:
-    "https://images.unsplash.com/photo-1592503254549-d83d24a4dfab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1332&q=80",
-  imageText: "main image description",
+    "https://images.unsplash.com/photo-1486848538113-ce1a4923fbc5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=749&q=80",
+  imageText: "banner",
 };
 
 const products = [
@@ -36,7 +49,7 @@ export default function Blog() {
     <>
       <CssBaseline />
       <Container maxWidth="lg">
-        <Header title="ShoppersStop" />
+        <Header title="ShoppersStop" sections={sections} />
         <main>
           <Banner post={banner} />
           <Grid container spacing={4}>

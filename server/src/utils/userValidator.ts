@@ -24,7 +24,10 @@ export const loginValidation = (data: any): joi.ValidationResult<any> => {
   const loginValidationSchema = joi.object({
     email: joi.string().email().required(),
     password: joi.string().required(),
-    role: joi.string().valid(...roleTypes),
+    role: joi
+      .string()
+      .valid(...roleTypes)
+      .required(),
   });
   return loginValidationSchema.validate(data, { convert: false });
 };

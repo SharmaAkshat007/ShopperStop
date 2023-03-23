@@ -1,5 +1,4 @@
 import morgan, { StreamOptions } from "morgan";
-import Logger from "../utils/logger";
 import dotenv from "dotenv";
 import fs from "fs";
 dotenv.config();

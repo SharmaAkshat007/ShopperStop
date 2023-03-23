@@ -8,6 +8,8 @@
     "start": "tsc & node .",
     "dev": "tsc -w & nodemon .",
     "create:db": "tsc & node ./dist/db/tables.js createTables",
+    "pg-up": "docker-compose -f docker-compose-pg.yml up",
+    "redis-up": "docker-compose -f docker-compose-redis.yml up",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Akshat Sharma",
