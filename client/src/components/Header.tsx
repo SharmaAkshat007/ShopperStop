@@ -5,6 +5,8 @@ import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Typography from "@mui/material/Typography";
 import { Link } from "@mui/material";
+import { removeUser } from "../utils/localStorage";
+import { useHistory } from "react-router";
 
 interface HeaderProps {
   sections: ReadonlyArray<{
@@ -16,6 +18,12 @@ interface HeaderProps {
 
 export default function Header(props: HeaderProps) {
   const { sections, title } = props;
+  const history = useHistory();
+
+  const handleSignOut = () => {
+    removeUser();
+    history.push("/signin");
+  };
 
   return (
     <React.Fragment>
@@ -34,7 +42,7 @@ export default function Header(props: HeaderProps) {
         <IconButton sx={{ mr: "1.5rem" }}>
           <AccountCircleIcon />
         </IconButton>
-        <Button variant="outlined" size="small">
+        <Button variant="outlined" size="small" onClick={handleSignOut}>
           Sign Out
         </Button>
       </Toolbar>

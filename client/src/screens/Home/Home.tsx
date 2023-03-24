@@ -5,6 +5,9 @@ import Header from "../../components/Header";
 import Banner from "../../components/Banner";
 import ProductTile from "../../components/ProductTile";
 import Footer from "../../components/Footer";
+import { getUser } from "../../utils/localStorage";
+import { Redirect } from "react-router";
+import { Role } from "../../enum";
 
 const sections = [
   { title: "Mobiles", url: "#" },
@@ -44,22 +47,28 @@ const products = [
   },
 ];
 
-export default function Blog() {
-  return (
-    <>
-      <CssBaseline />
-      <Container maxWidth="lg">
-        <Header title="ShoppersStop" sections={sections} />
-        <main>
-          <Banner post={banner} />
-          <Grid container spacing={4}>
-            {products.map((product) => (
-              <ProductTile key={product.title} product={product} />
-            ))}
-          </Grid>
-        </main>
-      </Container>
-      <Footer title="" description="Made with ❤️ by Akshat Sharma" />
-    </>
-  );
+export default function Home() {
+  const user = getUser();
+
+  if (user === null || user.role === Role.SELLER) {
+    return <Redirect to="/signin"></Redirect>;
+  } else {
+    return (
+      <>
+        <CssBaseline />
+        <Container maxWidth="lg">
+          <Header title="ShoppersStop" sections={sections} />
+          <main>
+            <Banner post={banner} />
+            <Grid container spacing={4}>
+              {products.map((product) => (
+                <ProductTile key={product.title} product={product} />
+              ))}
+            </Grid>
+          </main>
+        </Container>
+        <Footer title="" description="Made with ❤️ by Akshat Sharma" />
+      </>
+    );
+  }
 }

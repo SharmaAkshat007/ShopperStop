@@ -12,7 +12,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Copyright from "../../components/Copyright";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import errors from "../../utils/error";
 import {
   checkEmailError,
@@ -22,7 +22,9 @@ import {
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import ErrorBanner from "../../components/ErrorBanner";
 import axios from "axios";
-import { User, UserContext } from "../../store/UserContext";
+import { getUser, setUser } from "../../utils/localStorage";
+import { User } from "../../types/user";
+import { Role } from "../../enum";
 
 export default function SignIn() {
   const [email, setEmail] = useState<string>("");
@@ -31,8 +33,7 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [reqError, setReqError] = useState<string>("");
   const [role, setRole] = useState<Array<boolean>>([false, false]);
-  // Global States
-  const { user, setUser } = useContext(UserContext);
+
   const history = useHistory();
 
   const handleBuyer = () => {
@@ -91,15 +92,14 @@ export default function SignIn() {
       //   password: password,
       //   error: error,
       // });
+      let userRole: string = "";
       try {
-        let userRole: string = "";
         if (role[0] === true) {
           userRole = "buyer";
         } else if (role[1] === true) {
           userRole = "seller";
         }
 
-        // console.log(userRole);
         const res = await axios.post(
           `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/auth/login`,
           {
@@ -110,28 +110,27 @@ export default function SignIn() {
         );
 
         const currUser: User = {
-          loggedIn: true,
           firstName: res.data.data[0].firstName,
           lastName: res.data.data[0].lastName,
           email: res.data.data[0].email,
+          role: userRole,
           accessToken: res.data.data[0].access_token,
           refreshToken: res.data.data[0].refresh_token,
         };
 
-        // console.log(currUser);
-
-        setReqError("");
-        console.log(user);
         setUser(currUser);
-        console.log(user);
-        history.push("/home");
+        setReqError("");
+        if (userRole === Role.BUYER) {
+          history.push("/home");
+        } else if (userRole === Role.SELLER) {
+          history.push("/admin");
+        }
       } catch (err: any) {
         const message: string = err.response.data.message;
         setReqError(message);
       }
     }
   };
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

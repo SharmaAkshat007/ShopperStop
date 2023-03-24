@@ -1,12 +1,19 @@
 import { Redirect } from "react-router-dom";
-import { UserContext } from "../store/UserContext";
-import { useContext } from "react";
+import { getUser } from "../utils/localStorage";
+import { User } from "../types/user";
+import { Role } from "../enum";
+
 function Wrapper() {
-  const { user } = useContext(UserContext);
-  if (!user.loggedIn) {
+  const user: User | null = getUser();
+
+  if (user === null) {
     return <Redirect to="/signin" />;
-  } else {
+  } else if (user.role === Role.BUYER) {
     return <Redirect to="/home" />;
+  } else if (user.role === Role.SELLER) {
+    return <Redirect to="/admin" />;
+  } else {
+    return <></>;
   }
 }
 
