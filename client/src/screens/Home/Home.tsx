@@ -9,7 +9,7 @@ import { getUser } from "../../utils/localStorage";
 import { Redirect } from "react-router";
 import { Role } from "../../enum";
 import { useState, useEffect } from "react";
-import { Product } from "../../types/product";
+import { ProductSeller } from "../../types/product";
 import axios from "axios";
 import { User } from "../../types/user";
 import getAccessToken from "../../utils/getAccessToken";
@@ -36,7 +36,7 @@ const banner = {
 };
 
 export default function Home() {
-  const [products, setProducts] = useState<Array<Product>>([]);
+  const [products, setProducts] = useState<Array<ProductSeller>>([]);
   const user: User | null = getUser();
 
   const getAllProducts = async () => {
@@ -51,23 +51,25 @@ export default function Home() {
           },
         }
       );
-      const allProducts: Array<Product> = res.data.data.map((data: Product) => {
-        return {
-          id: data.id,
-          name: data.name,
-          description: data.description,
-          quantity: data.quantity,
-          price: data.price,
-          user_id: data.user_id,
-          image_name: data.image_name,
-          image_path: data.image_path,
-          email: data.email,
-          mimetype: data.mimetype,
-          size: data.size,
-          first_name: data.first_name,
-          last_name: data.last_name,
-        } as Product;
-      });
+      const allProducts: Array<ProductSeller> = res.data.data.map(
+        (data: ProductSeller) => {
+          return {
+            id: data.id,
+            name: data.name,
+            description: data.description,
+            quantity: data.quantity,
+            price: data.price,
+            user_id: data.user_id,
+            image_name: data.image_name,
+            image_path: data.image_path,
+            email: data.email,
+            mimetype: data.mimetype,
+            size: data.size,
+            first_name: data.first_name,
+            last_name: data.last_name,
+          } as ProductSeller;
+        }
+      );
 
       setProducts(allProducts);
     } catch (err: any) {

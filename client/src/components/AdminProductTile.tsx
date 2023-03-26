@@ -9,13 +9,14 @@ import Collapse from "@mui/material/Collapse";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Grid } from "@mui/material";
-import { Product, ProductSeller } from "../types/product";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Button, Grid } from "@mui/material";
+import { Product } from "../types/product";
+import UpdateIcon from "@mui/icons-material/Update";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-interface ProductTileProps {
+interface AdminProductTileProps {
   key: string;
-  product: ProductSeller;
+  product: Product;
 }
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -33,7 +34,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function ProductTile(props: ProductTileProps) {
+export default function AdminProductTile(props: AdminProductTileProps) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -41,6 +42,10 @@ export default function ProductTile(props: ProductTileProps) {
   };
 
   const { product } = props;
+
+  const deleteProduct = (event: any) => {
+    console.log(event.target);
+  };
 
   return (
     <Grid item xs={10} md={4}>
@@ -51,17 +56,15 @@ export default function ProductTile(props: ProductTileProps) {
           <Typography variant="body2" color="text.secondary">
             {"MRP : " + product.price + " ₹"}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {"Seller Name : " + product.first_name + " " + product.last_name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {"Seller Email : " + product.email}
-          </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <AddShoppingCartIcon />
+          <IconButton sx={{ color: "blue" }} aria-label="add to favorites">
+            <UpdateIcon />
           </IconButton>
+          <IconButton sx={{ color: "red" }} aria-label="add to favorites">
+            <DeleteIcon />
+          </IconButton>
+
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
@@ -9,21 +9,21 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { mainListItems } from "../../components/listItems";
-import Orders from "../../components/Orders";
-import Footer from "../../components/Footer";
 import LogoutIcon from "@mui/icons-material/Logout";
 import getAccessToken from "../../utils/getAccessToken";
 import axios from "axios";
 import { removeUser } from "../../utils/localStorage";
 import { useHistory } from "react-router";
 import darkTheme from "../../utils/theme";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import AddIcon from "@mui/icons-material/Add";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import Main from "../../components/Main";
 
 const drawerWidth: number = 240;
 
@@ -76,24 +76,30 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 function DashboardContent() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
+  const [panel, setPanel] = useState(0);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
   const history = useHistory();
 
   const handleSignOut = async () => {
-    const access_token: string = await getAccessToken();
-    await axios.get(
-      `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/auth/logout`,
-      {
-        headers: {
-          authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
-    removeUser();
-    history.push("/signin");
+    try {
+      const access_token: string = await getAccessToken();
+      await axios.get(
+        `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/auth/logout`,
+        {
+          headers: {
+            authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      removeUser();
+      history.push("/signin");
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <ThemeProvider theme={darkTheme}>
@@ -145,7 +151,26 @@ function DashboardContent() {
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav">{mainListItems}</List>
+          <List component="nav">
+            <ListItemButton onClick={() => setPanel(0)}>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItemButton>
+            <ListItemButton onClick={() => setPanel(1)}>
+              <ListItemIcon>
+                <AddIcon />
+              </ListItemIcon>
+              <ListItemText primary="Add Product" />
+            </ListItemButton>
+            <ListItemButton onClick={() => setPanel(2)}>
+              <ListItemIcon>
+                <InventoryIcon />
+              </ListItemIcon>
+              <ListItemText primary="All Products" />
+            </ListItemButton>
+          </List>
         </Drawer>
         <Box
           component="main"
@@ -160,14 +185,10 @@ function DashboardContent() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-              <Orders />
-            </Paper>
-          </Container>
+          <Main panel={panel} setPanel={setPanel} />
         </Box>
       </Box>
-      <Footer title="" description="Made with ❤️ by Akshat Sharma" />
+      {/* <Footer title="" description="Made with ❤️ by Akshat Sharma" /> */}
     </ThemeProvider>
   );
 }

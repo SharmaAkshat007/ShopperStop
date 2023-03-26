@@ -24,17 +24,21 @@ export default function Header(props: HeaderProps) {
   const history = useHistory();
 
   const handleSignOut = async () => {
-    const access_token: string = await getAccessToken();
-    await axios.get(
-      `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/auth/logout`,
-      {
-        headers: {
-          authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
-    removeUser();
-    history.push("/signin");
+    try {
+      const access_token: string = await getAccessToken();
+      await axios.get(
+        `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/auth/logout`,
+        {
+          headers: {
+            authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      removeUser();
+      history.push("/signin");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
