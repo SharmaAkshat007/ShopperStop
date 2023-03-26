@@ -8,6 +8,11 @@ import Footer from "../../components/Footer";
 import { getUser } from "../../utils/localStorage";
 import { Redirect } from "react-router";
 import { Role } from "../../enum";
+import { useState, useEffect } from "react";
+import { Product } from "../../types/product";
+import axios from "axios";
+import { User } from "../../types/user";
+import getAccessToken from "../../utils/getAccessToken";
 
 const sections = [
   { title: "Mobiles", url: "#" },
@@ -30,25 +35,51 @@ const banner = {
   imageText: "banner",
 };
 
-const products = [
-  {
-    title: "Featured post",
-    description:
-      "This is a wider card with supporting text below as a natural lead-in to additional content.",
-    image: "https://source.unsplash.com/random",
-    imageLabel: "Image Text",
-  },
-  {
-    title: "Post title",
-    description:
-      "This is a wider card with supporting text below as a natural lead-in to additional content.",
-    image: "https://source.unsplash.com/random",
-    imageLabel: "Image Text",
-  },
-];
-
 export default function Home() {
-  const user = getUser();
+  const [products, setProducts] = useState<Array<Product>>([]);
+  const user: User | null = getUser();
+
+  const getAllProducts = async () => {
+    try {
+      const access_token: string = await getAccessToken();
+
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/product`,
+        {
+          headers: {
+            authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      const allProducts: Array<Product> = res.data.data.map((data: Product) => {
+        return {
+          id: data.id,
+          name: data.name,
+          description: data.description,
+          quantity: data.quantity,
+          price: data.price,
+          user_id: data.user_id,
+          image_name: data.image_name,
+          image_path: data.image_path,
+          email: data.email,
+          mimetype: data.mimetype,
+          size: data.size,
+          first_name: data.first_name,
+          last_name: data.last_name,
+        } as Product;
+      });
+
+      setProducts(allProducts);
+    } catch (err: any) {
+      // console.log(err.response);
+    }
+  };
+
+  useEffect(() => {
+    if (user !== null) {
+      getAllProducts();
+    }
+  }, []);
 
   if (user === null || user.role === Role.SELLER) {
     return <Redirect to="/signin"></Redirect>;
@@ -62,7 +93,7 @@ export default function Home() {
             <Banner post={banner} />
             <Grid container spacing={4}>
               {products.map((product) => (
-                <ProductTile key={product.title} product={product} />
+                <ProductTile key={product.id} product={product} />
               ))}
             </Grid>
           </main>

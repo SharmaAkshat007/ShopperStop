@@ -3,6 +3,5 @@ export type User = {
   lastName: string;
   email: string;
   role: string;
-  accessToken: string;
   refreshToken: string;
 };

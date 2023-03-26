@@ -7,6 +7,9 @@ import Typography from "@mui/material/Typography";
 import { Link } from "@mui/material";
 import { removeUser } from "../utils/localStorage";
 import { useHistory } from "react-router";
+import getAccessToken from "../utils/getAccessToken";
+import axios from "axios";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 interface HeaderProps {
   sections: ReadonlyArray<{
@@ -20,7 +23,16 @@ export default function Header(props: HeaderProps) {
   const { sections, title } = props;
   const history = useHistory();
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    const access_token: string = await getAccessToken();
+    await axios.get(
+      `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/auth/logout`,
+      {
+        headers: {
+          authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
     removeUser();
     history.push("/signin");
   };
@@ -41,6 +53,9 @@ export default function Header(props: HeaderProps) {
         </Typography>
         <IconButton sx={{ mr: "1.5rem" }}>
           <AccountCircleIcon />
+        </IconButton>
+        <IconButton sx={{ mr: "1.5rem" }}>
+          <ShoppingCartIcon />
         </IconButton>
         <Button variant="outlined" size="small" onClick={handleSignOut}>
           Sign Out

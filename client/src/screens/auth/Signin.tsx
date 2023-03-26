@@ -95,9 +95,9 @@ export default function SignIn() {
       let userRole: string = "";
       try {
         if (role[0] === true) {
-          userRole = "buyer";
+          userRole = Role.BUYER;
         } else if (role[1] === true) {
-          userRole = "seller";
+          userRole = Role.SELLER;
         }
 
         const res = await axios.post(
@@ -114,7 +114,6 @@ export default function SignIn() {
           lastName: res.data.data[0].lastName,
           email: res.data.data[0].email,
           role: userRole,
-          accessToken: res.data.data[0].access_token,
           refreshToken: res.data.data[0].refresh_token,
         };
 
