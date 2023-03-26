@@ -15,6 +15,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors());
+app.use("/images", express.static(process.cwd() + "/images"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morganMiddleware);
@@ -51,5 +52,7 @@ app.use(
 const PORT = process.env.SERVER_PORT || 8080;
 
 app.listen(PORT, () => {
-  Logger.info(`Server running at PORT ${PORT}\nhttp://127.0.0.1:${PORT}`);
+  Logger.info(
+    `Server running at PORT ${PORT}\n${process.env.DEV_BASE_URL}:${PORT}`
+  );
 });

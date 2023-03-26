@@ -79,7 +79,9 @@ export const verifyRefreshToken = async (
       return next(
         new Error(401, "Invalid request. Token is not same in store.")
       );
+
     await redis.quit();
+
     next();
   } catch (error) {
     return next(new Error(401, "Your session is not valid"));

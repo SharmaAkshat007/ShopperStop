@@ -10,6 +10,7 @@ declare global {
       DB_NAME: string;
       NODE_ENV: "DEV" | "TEST" | "PROD";
       SERVER_PORT: string;
+      DEV_BASE_URL: string;
       REDIS_PORT: string;
       REDIS_HOST: string;
       REDIS_PASSWORD: string;

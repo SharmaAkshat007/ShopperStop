@@ -9,6 +9,7 @@ const { promisify } = require("util");
 const unlinkAsync = promisify(fs.unlink);
 import { PoolClient } from "pg";
 import pool from "../db/config";
+import { ProductSeller } from "../models/product.model";
 
 export const getProducts = async (
   req: Request,
@@ -19,7 +20,8 @@ export const getProducts = async (
   try {
     client = await pool.connect();
     await client.query("BEGIN");
-    const result: Array<Product> = await Product.getAllProducts(client);
+    const result: Array<ProductSeller> = await Product.getAllProducts(client);
+
     await client.query("COMMIT");
     return res.status(200).json({
       error: false,

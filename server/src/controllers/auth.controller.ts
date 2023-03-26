@@ -151,9 +151,8 @@ const getAccessToken = async (
 ) => {
   const user_id: string = req.user_data.id;
   const role: string = req.user_data.role;
-
   const access_token = jwt.sign(
-    { id: user_id },
+    { id: user_id, role: role },
     process.env.JWT_ACCESS_SECRET,
     { expiresIn: process.env.JWT_ACCESS_TIME }
   );
@@ -174,7 +173,6 @@ async function generateRefreshToken(id: string, role: string): Promise<string> {
       expiresIn: process.env.JWT_REFRESH_TIME,
     }
   );
-
   await redis.connect().catch(() => {});
   await redis.set(id, refresh_token);
   await redis.quit();
