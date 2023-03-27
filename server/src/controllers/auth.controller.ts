@@ -129,7 +129,6 @@ const logout = async (req: UserRequest, res: Response, next: NextFunction) => {
   const user_id: string = req.user_data.id;
   const token: string = req.token;
   try {
-    await redis.connect().catch(() => {});
     await redis.del(user_id);
     await redis.set("BL_" + user_id, token);
     return res.status(200).json({
@@ -139,8 +138,6 @@ const logout = async (req: UserRequest, res: Response, next: NextFunction) => {
     });
   } catch (err) {
     return next(new Error(500, err));
-  } finally {
-    await redis.quit();
   }
 };
 
@@ -173,9 +170,9 @@ async function generateRefreshToken(id: string, role: string): Promise<string> {
       expiresIn: process.env.JWT_REFRESH_TIME,
     }
   );
-  await redis.connect().catch(() => {});
+
   await redis.set(id, refresh_token);
-  await redis.quit();
+
   return refresh_token;
 }
 

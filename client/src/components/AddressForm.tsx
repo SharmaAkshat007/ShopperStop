@@ -1,39 +1,23 @@
-import * as React from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import { Address } from "../types/address";
+import { AddressTile } from "./AddressTile";
 
-export default function AddressForm() {
+interface AddressFormProps {
+  addresses: Array<Address>;
+}
+
+export default function AddressForm(props: AddressFormProps) {
+  const { addresses } = props;
+
   return (
-    <React.Fragment>
+    <>
+      {addresses.length > 0 ? <AddressTile addresses={addresses} /> : <></>}
       <Typography variant="h6" gutterBottom>
-        Shipping address
+        New Address
       </Typography>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="firstName"
-            name="firstName"
-            label="First name"
-            fullWidth
-            autoComplete="given-name"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="lastName"
-            name="lastName"
-            label="Last name"
-            fullWidth
-            autoComplete="family-name"
-            variant="standard"
-          />
-        </Grid>
         <Grid item xs={12}>
           <TextField
             required
@@ -55,6 +39,17 @@ export default function AddressForm() {
             variant="standard"
           />
         </Grid>
+        <Grid item xs={12}>
+          <TextField
+            required
+            id="mobile"
+            name="mobile"
+            label="Mobile No."
+            fullWidth
+            autoComplete="mobile"
+            variant="standard"
+          />
+        </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
@@ -66,6 +61,7 @@ export default function AddressForm() {
             variant="standard"
           />
         </Grid>
+
         <Grid item xs={12} sm={6}>
           <TextField
             id="state"
@@ -97,15 +93,7 @@ export default function AddressForm() {
             variant="standard"
           />
         </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox color="secondary" name="saveAddress" value="yes" />
-            }
-            label="Use this address for payment details"
-          />
-        </Grid>
       </Grid>
-    </React.Fragment>
+    </>
   );
 }

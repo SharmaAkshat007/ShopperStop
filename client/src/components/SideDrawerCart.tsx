@@ -17,12 +17,6 @@ export function SideDrawerCart(props: SideDrawerCartProps) {
   const { open, setOpen, cart, setCart } = props;
   const history = useHistory();
 
-
-  
-
-  useEffect(()=>{
-   
-  }, []);
   const handleCart = async () => {
     try {
       const access_token: string = await getAccessToken();

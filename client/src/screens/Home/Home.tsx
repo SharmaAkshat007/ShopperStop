@@ -70,13 +70,36 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    if (user !== null) {
-      getAllProducts();
-    }
-  }, []);
+  const getCartItems = async () => {
+    try {
+      const access_token: string = await getAccessToken();
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/cart/my`,
+        {
+          headers: {
+            authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
 
-  console.log(cart);
+      const cartData: Array<Cart> = res.data.data.map((item: Cart) => {
+        return {
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          quantity: item.quantity,
+          price: item.price,
+          image_path: item.image_path,
+        };
+      });
+      setCart(cartData);
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    getAllProducts();
+    getCartItems();
+  }, []);
 
   if (user === null || user.role === Role.SELLER) {
     return <Redirect to="/signin"></Redirect>;

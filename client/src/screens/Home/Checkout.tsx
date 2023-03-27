@@ -1,28 +1,31 @@
-import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Toolbar from "@mui/material/Toolbar";
 import Paper from "@mui/material/Paper";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import AddressForm from "../../components/AddressForm";
 import PaymentForm from "../../components/PaymentForm";
 import Review from "../../components/Review";
 import Footer from "../../components/Footer";
+import { useLocation } from "react-router-dom";
+import { Cart } from "../../types/cart";
+import darkTheme from "../../utils/theme";
+import { useEffect, useState } from "react";
+import { Address } from "../../types/address";
+import getAccessToken from "../../utils/getAccessToken";
+import axios from "axios";
 
 const steps = ["Shipping address", "Payment details", "Review your order"];
 
-function getStepContent(step: number) {
+function getStepContent(step: number, addresses: Array<Address>) {
   switch (step) {
     case 0:
-      return <AddressForm />;
+      return <AddressForm addresses={addresses} />;
     case 1:
       return <PaymentForm />;
     case 2:
@@ -32,10 +35,12 @@ function getStepContent(step: number) {
   }
 }
 
-const theme = createTheme();
-
 export default function Checkout(props: any) {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+  const location = useLocation<{ cart: Array<Cart> }>();
+  const { cart } = location.state;
+
+  const [addresses, setAddresses] = useState<Array<Address>>([]);
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -44,25 +49,32 @@ export default function Checkout(props: any) {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-  console.log(props);
+
+  const getAddresses = async () => {
+    try {
+      const access_token = await getAccessToken();
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/address`,
+        {
+          headers: {
+            authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      const allAddresses: Array<Address> = res.data.data.map(
+        (address: Address) => address as Address
+      );
+      setAddresses(allAddresses);
+    } catch {}
+  };
+
+  useEffect(() => {
+    getAddresses();
+  }, []);
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <AppBar
-        position="absolute"
-        color="default"
-        elevation={0}
-        sx={{
-          position: "relative",
-          borderBottom: (t) => `1px solid ${t.palette.divider}`,
-        }}
-      >
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Company name
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper
           variant="outlined"
@@ -79,7 +91,7 @@ export default function Checkout(props: any) {
             ))}
           </Stepper>
           {activeStep === steps.length ? (
-            <React.Fragment>
+            <>
               <Typography variant="h5" gutterBottom>
                 Thank you for your order.
               </Typography>
@@ -88,10 +100,10 @@ export default function Checkout(props: any) {
                 confirmation, and will send you an update when your order has
                 shipped.
               </Typography>
-            </React.Fragment>
+            </>
           ) : (
-            <React.Fragment>
-              {getStepContent(activeStep)}
+            <>
+              {getStepContent(activeStep, addresses)}
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
@@ -106,7 +118,7 @@ export default function Checkout(props: any) {
                   {activeStep === steps.length - 1 ? "Place order" : "Next"}
                 </Button>
               </Box>
-            </React.Fragment>
+            </>
           )}
         </Paper>
         <Footer title="" description="Made with ❤️ by Akshat Sharma" />

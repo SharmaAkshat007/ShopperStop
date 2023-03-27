@@ -1,6 +1,6 @@
 import { PoolClient } from "pg";
 
-const addressCreateQuery = `INSERT INTO addresses(user_id, address_line1, address_line2, city, state, pin_code, mobile_no) VALUES($1, $2, $3, $4, $5, $6, $7)`;
+const addressCreateQuery = `INSERT INTO addresses(user_id, address_line1, address_line2, city, state, pin_code, mobile_no) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
 const getAllQuery = `SELECT * FROM addresses WHERE user_id=$1`;
 const deleteQuery = `DELETE FROM addresses WHERE user_id=$1 AND id=$2 RETURNING *`;
 const updateQuery = `UPDATE addresses SET address_line1=$1, address_line2=$2, city=$3, state=$4, pin_code=$5, mobile_no=$6 WHERE id=$7 AND user_id=$8 RETURNING *`;
@@ -85,8 +85,8 @@ export default class Address {
     return data;
   }
 
-  public async save(client: PoolClient, user_id: string): Promise<void> {
-    await client.query(addressCreateQuery, [
+  public async save(client: PoolClient, user_id: string): Promise<any> {
+    const res = await client.query(addressCreateQuery, [
       user_id,
       this.address_line1,
       this.address_line2,
@@ -95,6 +95,7 @@ export default class Address {
       this.pin_code,
       this.mobile_no,
     ]);
+    return res.rows;
   }
 
   public async update(client: PoolClient): Promise<boolean> {

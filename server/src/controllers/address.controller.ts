@@ -54,12 +54,12 @@ export const createAddress = async (
   try {
     client = await pool.connect();
     await client.query("BEGIN");
-    await address.save(client, user_id);
+    const data = await address.save(client, user_id);
     await client.query("COMMIT");
     return res.status(200).json({
       error: false,
       message: "Address added succesfully",
-      data: [],
+      data: data,
     });
   } catch (err: any) {
     await client.query("ROLLBACK");

@@ -4,7 +4,7 @@ const createQuery = `INSERT INTO cart_products(buyer_id, product_id, quantity) V
 const findQuery = `SELECT * FROM cart_products WHERE buyer_id=$1 AND product_id=$2`;
 const updateQuery = `UPDATE cart_products SET quantity=$1 WHERE buyer_id=$2 AND product_id=$3 RETURNING *`;
 const deleteQuery = `DELETE FROM cart_products WHERE buyer_id=$1 AND product_id=$2 RETURNING *`;
-const getAllQuery = `SELECT A.id as id, B.id as product_id, B.name as name, B.description as description, A.quantity as cart_quantity, B.price as price, B.image_path as image_path, B.mimetype as mimetype 
+const getAllQuery = `SELECT A.id as id, B.id as product_id, B.name as name, B.description as description, A.quantity as quantity, B.price as price, B.image_path as image_path, B.image_name as image_name, B.mimetype as mimetype 
 FROM cart_products as A, products as B
 WHERE A.buyer_id = $1 AND B.id = A.product_id
 `;
@@ -54,7 +54,11 @@ export default class CartProduct {
     buyer_id: string
   ): Promise<any> {
     const result = await client.query(getAllQuery, [buyer_id]);
-    return result.rows;
+    const items = result.rows.map((item) => {
+      item.image_path = `${process.env.DEV_BASE_URL}:${process.env.SERVER_PORT}/images/${item.image_name}`;
+      return item;
+    });
+    return items;
   }
 
   public async save(client: PoolClient): Promise<CartProduct> {

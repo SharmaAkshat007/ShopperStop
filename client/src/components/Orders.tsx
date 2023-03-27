@@ -19,7 +19,6 @@ export default function Orders() {
     try {
       const access_token: string = await getAccessToken();
       const orderId = event.target.id as string;
-      console.log(access_token);
 
       await fetch(
         `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/order/changeStatus/${orderId}`,
@@ -47,6 +46,7 @@ export default function Orders() {
   const getMyOrders = async () => {
     try {
       const access_token: string = await getAccessToken();
+
       const res = await axios.get(
         `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/order/my`,
         {

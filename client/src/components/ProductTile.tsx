@@ -62,9 +62,6 @@ export default function ProductTile(props: ProductTileProps) {
           quantity: 1,
           price: product.price,
           image_path: product.image_path,
-          email: product.email,
-          first_name: product.first_name,
-          last_name: product.last_name,
         },
       ]);
     } else {

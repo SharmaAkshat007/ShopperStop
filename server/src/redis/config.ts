@@ -15,12 +15,20 @@ redis_client.on("connect", (): any => {
   Logger.info("Redis client connected!");
 });
 
-redis_client.on("quit", (): any => {
-  console.log("Redis removed!");
+redis_client.on("end", (): any => {
+  Logger.info("Redis client removed!");
 });
 
 redis_client.on("error", (err: any): any => {
-  Logger.error(err);
+  Logger.error(err.message);
 });
+
+process.on("SIGINT", () => {
+  redis_client.quit();
+});
+
+(async () => {
+  await redis_client.connect().catch(() => {});
+})();
 
 export default redis_client;
