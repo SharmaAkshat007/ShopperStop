@@ -1,15 +1,17 @@
-import * as React from "react";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Typography from "@mui/material/Typography";
-import { Link } from "@mui/material";
 import { removeUser } from "../utils/localStorage";
 import { useHistory } from "react-router";
 import getAccessToken from "../utils/getAccessToken";
 import axios from "axios";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Badge, Link } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import { Cart } from "../types/cart";
+import { Dispatch, SetStateAction } from "react";
 
 interface HeaderProps {
   sections: ReadonlyArray<{
@@ -17,10 +19,12 @@ interface HeaderProps {
     url: string;
   }>;
   title: string;
+  cart: Array<Cart>;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Header(props: HeaderProps) {
-  const { sections, title } = props;
+  const { sections, title, cart, setOpen } = props;
   const history = useHistory();
 
   const handleSignOut = async () => {
@@ -42,9 +46,10 @@ export default function Header(props: HeaderProps) {
   };
 
   return (
-    <React.Fragment>
+    <>
       <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Typography>Buy & Sell</Typography>
+
         <Typography
           component="h2"
           variant="h5"
@@ -53,14 +58,29 @@ export default function Header(props: HeaderProps) {
           noWrap
           sx={{ flex: 1 }}
         >
-          {title}
+          <RouterLink
+            style={{ textDecoration: "none", color: "black" }}
+            to="/home"
+          >
+            {title}
+          </RouterLink>
         </Typography>
+
         <IconButton sx={{ mr: "1.5rem" }}>
           <AccountCircleIcon />
         </IconButton>
-        <IconButton sx={{ mr: "1.5rem" }}>
-          <ShoppingCartIcon />
+
+        <IconButton
+          onClick={() => {
+            setOpen(true);
+          }}
+          sx={{ mr: "1.5rem" }}
+        >
+          <Badge badgeContent={cart.length} color="primary">
+            <ShoppingCartIcon />
+          </Badge>
         </IconButton>
+
         <Button variant="outlined" size="small" onClick={handleSignOut}>
           Sign Out
         </Button>
@@ -72,8 +92,8 @@ export default function Header(props: HeaderProps) {
       >
         {sections.map((section) => (
           <Link
-            color="inherit"
             noWrap
+            color="inherit"
             key={section.title}
             variant="body2"
             href={section.url}
@@ -83,6 +103,6 @@ export default function Header(props: HeaderProps) {
           </Link>
         ))}
       </Toolbar>
-    </React.Fragment>
+    </>
   );
 }

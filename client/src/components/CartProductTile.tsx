@@ -1,3 +1,4 @@
+import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -8,20 +9,13 @@ import Collapse from "@mui/material/Collapse";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Button, Grid } from "@mui/material";
-import { Product } from "../types/product";
-import getAccessToken from "../utils/getAccessToken";
-import axios from "axios";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Grid } from "@mui/material";
+import { Product, ProductSeller } from "../types/product";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
-interface AdminProductTileProps {
+interface ProductTileProps {
   key: string;
-  product: Product;
-  products: Array<Product>;
-  setProducts: Dispatch<SetStateAction<Array<Product>>>;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  productId: string;
-  setProductId: Dispatch<SetStateAction<string>>;
+  product: ProductSeller;
 }
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -39,47 +33,14 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function AdminProductTile(props: AdminProductTileProps) {
-  const [expanded, setExpanded] = useState(false);
-
-  const { setOpen, setProductId } = props;
-
-  const handleClickOpen = (event: any) => {
-    setOpen(true);
-    const productId = event.target.id as string;
-    setProductId(productId);
-  };
+export default function ProductTile(props: ProductTileProps) {
+  const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  const { product, products, setProducts } = props;
-
-  const deleteProduct = async (event: any) => {
-    try {
-      const productId = event.target.id as string;
-
-      const access_token: string = await getAccessToken();
-
-      const res = await axios.delete(
-        `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/product/delete/${productId}`,
-        {
-          headers: {
-            authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-
-      const newProducts = products.filter(
-        (product) => !(product.id === productId)
-      );
-
-      setProducts(newProducts);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { product } = props;
 
   return (
     <Grid item xs={10} md={4}>
@@ -91,23 +52,16 @@ export default function AdminProductTile(props: AdminProductTileProps) {
             {"MRP : " + product.price + " ₹"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {"Quantity : " + product.quantity}
+            {"Seller Name : " + product.first_name + " " + product.last_name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {"Seller Email : " + product.email}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <Button id={product.id} variant="outlined" onClick={handleClickOpen}>
-            Update
-          </Button>
-          <Button
-            id={product.id}
-            sx={{ marginLeft: "1rem" }}
-            color="error"
-            variant="outlined"
-            onClick={deleteProduct}
-          >
-            Delete
-          </Button>
-
+          <IconButton aria-label="add to favorites">
+            <AddShoppingCartIcon />
+          </IconButton>
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}

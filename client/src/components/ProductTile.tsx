@@ -1,4 +1,3 @@
-import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -10,12 +9,16 @@ import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Grid } from "@mui/material";
-import { Product, ProductSeller } from "../types/product";
+import { ProductSeller } from "../types/product";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { Dispatch, SetStateAction, useState } from "react";
+import { Cart } from "../types/cart";
 
 interface ProductTileProps {
   key: string;
   product: ProductSeller;
+  cart: Array<Cart>;
+  setCart: Dispatch<SetStateAction<Array<Cart>>>;
 }
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -34,13 +37,42 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 export default function ProductTile(props: ProductTileProps) {
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const { product, cart, setCart } = props;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  const { product } = props;
+  const handleAddCart = () => {
+    let idx = -1;
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i].id === product.id) {
+        idx = i;
+        break;
+      }
+    }
+    if (idx === -1) {
+      setCart([
+        ...cart,
+        {
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          quantity: 1,
+          price: product.price,
+          image_path: product.image_path,
+          email: product.email,
+          first_name: product.first_name,
+          last_name: product.last_name,
+        },
+      ]);
+    } else {
+      const newCart = [...cart];
+      newCart[idx].quantity += 1;
+      setCart(newCart);
+    }
+  };
 
   return (
     <Grid item xs={10} md={4}>
@@ -59,7 +91,7 @@ export default function ProductTile(props: ProductTileProps) {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
+          <IconButton onClick={handleAddCart} aria-label="add to favorites">
             <AddShoppingCartIcon />
           </IconButton>
           <ExpandMore

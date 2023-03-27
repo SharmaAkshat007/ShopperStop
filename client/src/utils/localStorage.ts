@@ -1,3 +1,4 @@
+import { Cart } from "../types/cart";
 import { User } from "../types/user";
 
 export const setUser = (currUser: User) => {

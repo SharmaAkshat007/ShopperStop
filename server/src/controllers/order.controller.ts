@@ -35,6 +35,34 @@ export const getAll = async (
   }
 };
 
+export const getMyOrders = async (
+  req: UserRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const seller_id = req.user_data.id;
+
+  let client: PoolClient;
+
+  try {
+    client = await pool.connect();
+    await client.query("BEGIN");
+    const data: Array<any> = await Order.getMyOrders(client, seller_id);
+
+    await client.query("COMMIT");
+    return res.status(200).json({
+      error: false,
+      message: "All order fetched",
+      data: data,
+    });
+  } catch (err: any) {
+    await client.query("ROLLBACK");
+    return next(new Error(500, err));
+  } finally {
+    client.release();
+  }
+};
+
 export const createOrder = async (
   req: UserRequest,
   res: Response,
@@ -148,7 +176,6 @@ export const changeStatus = async (
   next: NextFunction
 ) => {
   const orderProductId: string = req.params.orderId;
-
   let client: PoolClient;
   try {
     client = await pool.connect();

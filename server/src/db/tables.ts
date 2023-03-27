@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS cart_products(
 CREATE TABLE IF NOT EXISTS orders(
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   buyer_id UUID NOT NULL,
-  address_id UUID NOT NULL UNIQUE,
+  address_id UUID NOT NULL,
   date DATE NOT NULL DEFAULT CURRENT_DATE,
   FOREIGN KEY (buyer_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (address_id) REFERENCES addresses(id) ON DELETE CASCADE

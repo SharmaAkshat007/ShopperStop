@@ -28,4 +28,6 @@ orderRouter.put(
   orderController.changeStatus
 );
 
+orderRouter.get("/my", verifyToken, checkSeller, orderController.getMyOrders);
+
 export default orderRouter;

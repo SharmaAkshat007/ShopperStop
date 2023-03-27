@@ -14,7 +14,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import LogoutIcon from "@mui/icons-material/Logout";
 import getAccessToken from "../../utils/getAccessToken";
 import axios from "axios";
-import { removeUser } from "../../utils/localStorage";
+import { getUser, removeUser } from "../../utils/localStorage";
 import { useHistory } from "react-router";
 import darkTheme from "../../utils/theme";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -24,6 +24,9 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import AddIcon from "@mui/icons-material/Add";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import Main from "../../components/Main";
+import { Role } from "../../enum";
+import { User } from "../../types/user";
+import { Redirect } from "react-router-dom";
 
 const drawerWidth: number = 240;
 
@@ -101,6 +104,12 @@ function DashboardContent() {
       console.log(err);
     }
   };
+  const user: User | null = getUser();
+
+  if (user === null || user.role === Role.BUYER) {
+    return <Redirect to="/signin"></Redirect>;
+  }
+
   return (
     <ThemeProvider theme={darkTheme}>
       <Box sx={{ display: "flex" }}>

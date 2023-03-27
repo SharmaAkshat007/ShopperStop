@@ -9,6 +9,11 @@ WHERE A.buyer_id = $1 AND B.order_id = A.id AND C.id = A.address_id AND D.id = B
 const saveQuery = `INSERT INTO orders(buyer_id, address_id) VALUES($1, $2) RETURNING id`;
 const deleteQuery = `DELETE FROM orders WHERE id=$1 AND buyer_id=$2 RETURNING *`;
 
+const myOrdersQuery = `SELECT order_products.id, order_products.status, order_products.quantity, products.name, products.price, addresses.address_line1, addresses.address_line2, addresses.city, addresses.state, addresses.pin_code, addresses.mobile_no, users.first_name, users.last_name
+FROM orders, order_products, products, addresses, users
+WHERE orders.buyer_id = users.id AND orders.address_id = addresses.id AND order_products.order_id = orders.id AND order_products.product_id = products.id AND products.user_id = $1
+`;
+
 export default class Order {
   private id?: string;
   private buyer_id?: string;
@@ -53,6 +58,14 @@ export default class Order {
     buyer_id: string
   ): Promise<Array<any>> {
     const result = await client.query(getAllQuery, [buyer_id]);
+    return result.rows;
+  }
+
+  public static async getMyOrders(
+    client: PoolClient,
+    seller_id: string
+  ): Promise<any> {
+    const result = await client.query(myOrdersQuery, [seller_id]);
     return result.rows;
   }
 

@@ -4,6 +4,7 @@ import Signin from "./screens/auth/Signin";
 import Signup from "./screens/auth/Signup";
 import Home from "./screens/home/Home";
 import Admin from "./screens/home/Admin";
+import Checkout from "./screens/home/Checkout";
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
         </Route>
         <Route exact path="/admin">
           <Admin />
+        </Route>
+        <Route exact path="/checkout">
+          <Checkout />
         </Route>
       </Switch>
     </>

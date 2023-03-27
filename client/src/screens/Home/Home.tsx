@@ -13,19 +13,9 @@ import { ProductSeller } from "../../types/product";
 import axios from "axios";
 import { User } from "../../types/user";
 import getAccessToken from "../../utils/getAccessToken";
-
-const sections = [
-  { title: "Mobiles", url: "#" },
-  { title: "Computers", url: "#" },
-  { title: "TV", url: "#" },
-  { title: "Appliances", url: "#" },
-  { title: "Men's Fashion", url: "#" },
-  { title: "Womens's Fashion", url: "#" },
-  { title: "Sports", url: "#" },
-  { title: "Health", url: "#" },
-  { title: "Books", url: "#" },
-  { title: "Toys", url: "#" },
-];
+import { sections } from "../../utils/sections";
+import { Cart } from "../../types/cart";
+import { SideDrawerCart } from "../../components/SideDrawerCart";
 
 const banner = {
   title: "Buy with us!",
@@ -37,6 +27,9 @@ const banner = {
 
 export default function Home() {
   const [products, setProducts] = useState<Array<ProductSeller>>([]);
+  const [cart, setCart] = useState<Array<Cart>>([]);
+  const [open, setOpen] = useState(false);
+
   const user: User | null = getUser();
 
   const getAllProducts = async () => {
@@ -83,6 +76,8 @@ export default function Home() {
     }
   }, []);
 
+  console.log(cart);
+
   if (user === null || user.role === Role.SELLER) {
     return <Redirect to="/signin"></Redirect>;
   } else {
@@ -90,15 +85,33 @@ export default function Home() {
       <>
         <CssBaseline />
         <Container maxWidth="lg">
-          <Header title="ShoppersStop" sections={sections} />
+          <Header
+            title="ShoppersStop"
+            sections={sections}
+            cart={cart}
+            setOpen={setOpen}
+          />
           <main>
             <Banner post={banner} />
-            <Grid container spacing={4}>
-              {products.map((product) => (
-                <ProductTile key={product.id} product={product} />
-              ))}
-            </Grid>
+            <Container>
+              <Grid container spacing={4}>
+                {products.map((product) => (
+                  <ProductTile
+                    key={product.id}
+                    product={product}
+                    cart={cart}
+                    setCart={setCart}
+                  />
+                ))}
+              </Grid>
+            </Container>
           </main>
+          <SideDrawerCart
+            open={open}
+            setOpen={setOpen}
+            cart={cart}
+            setCart={setCart}
+          />
         </Container>
         <Footer title="" description="Made with ❤️ by Akshat Sharma" />
       </>

@@ -14,6 +14,6 @@ export default function Main(props: {
   } else if (panel === 1) {
     return <AddProduct panel={panel} setPanel={setPanel} />;
   } else {
-    return <AllProduct />;
+    return <AllProduct setPanel={setPanel} />;
   }
 }

@@ -7,7 +7,6 @@ import { Dispatch, SetStateAction, useState } from "react";
 import errors from "../utils/error";
 import axios from "axios";
 import getAccessToken from "../utils/getAccessToken";
-import SuccessBanner from "./SuccessBanner";
 
 export default function AddProduct(props: {
   panel: number;
@@ -19,8 +18,6 @@ export default function AddProduct(props: {
   const [quantity, setQuantity] = useState("");
   const [file, setFile] = useState<File>();
   const [error, setError] = useState("");
-
-  const [success, setSuccess] = useState("");
 
   const { setPanel } = props;
 
@@ -97,8 +94,8 @@ export default function AddProduct(props: {
         `{
         "name": "${name}",
         "description": "${description}",
-        "quantity": ${quantity},
-        "price": ${price}
+        "quantity": ${quantityNumber},
+        "price": ${priceNumber}
       }`
       );
 
@@ -123,14 +120,6 @@ export default function AddProduct(props: {
 
   return (
     <>
-      {success.length === 0 ? (
-        <></>
-      ) : (
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          {" "}
-          <SuccessBanner message={success} />
-        </Container>
-      )}
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
           <Typography variant="h6" gutterBottom sx={{ marginBottom: "2rem" }}>

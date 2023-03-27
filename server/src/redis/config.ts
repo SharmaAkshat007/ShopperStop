@@ -15,6 +15,10 @@ redis_client.on("connect", (): any => {
   Logger.info("Redis client connected!");
 });
 
+redis_client.on("quit", (): any => {
+  console.log("Redis removed!");
+});
+
 redis_client.on("error", (err: any): any => {
   Logger.error(err);
 });

@@ -1,16 +1,23 @@
-import { Container, Grid } from "@mui/material";
+import { Container } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Product } from "../types/product";
 import { User } from "../types/user";
 import getAccessToken from "../utils/getAccessToken";
 import { getUser } from "../utils/localStorage";
+import { Grid } from "@mui/material";
 import AdminProductTile from "./AdminProductTile";
+import FormDialog from "./FormDialog";
 
-export default function AllProduct() {
+export default function AllProduct(props: {
+  setPanel: Dispatch<SetStateAction<number>>;
+}) {
   const [products, setProducts] = useState<Array<Product>>([]);
+  const [open, setOpen] = useState(false);
+  const [productId, setProductId] = useState("");
 
   const user: User | null = getUser();
+
   const getAllProducts = async () => {
     try {
       const access_token: string = await getAccessToken();
@@ -52,9 +59,25 @@ export default function AllProduct() {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <FormDialog
+        open={open}
+        setOpen={setOpen}
+        productId={productId}
+        setPanel={props.setPanel}
+      />
       <Grid container spacing={4}>
         {products.map((product: Product) => {
-          return <AdminProductTile key={product.id} product={product} />;
+          return (
+            <AdminProductTile
+              key={product.id}
+              product={product}
+              products={products}
+              setProducts={setProducts}
+              setOpen={setOpen}
+              productId={productId}
+              setProductId={setProductId}
+            />
+          );
         })}
       </Grid>
     </Container>
