@@ -24,7 +24,7 @@ export default function Review(props: ReviewInterface) {
   const totalPrice = () => {
     let price = 0;
     cart.map((item) => {
-      price += item.price;
+      price += item.price * item.quantity;
     });
     return price;
   };
@@ -39,7 +39,9 @@ export default function Review(props: ReviewInterface) {
         {cart.map((item) => (
           <ListItem key={item.name} sx={{ py: 1, px: 0 }}>
             <ListItemText primary={item.name} />
-            <Typography variant="body2">{item.price}</Typography>
+            <Typography variant="body2">
+              {item.price * item.quantity}
+            </Typography>
           </ListItem>
         ))}
         <ListItem sx={{ py: 1, px: 0 }}>

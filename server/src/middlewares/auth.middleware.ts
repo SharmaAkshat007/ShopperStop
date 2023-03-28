@@ -72,10 +72,10 @@ export const verifyRefreshToken = async (
 
     if (data === null)
       return next(new Error(401, "Invalid request. Token is not in store."));
-    if (data !== token)
-      return next(
-        new Error(401, "Invalid request. Token is not same in store.")
-      );
+    // if (data !== token)
+    //   return next(
+    //     new Error(401, "Invalid request. Token is not same in store.")
+    //   );
 
     next();
   } catch (error) {
