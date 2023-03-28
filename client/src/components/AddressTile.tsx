@@ -1,13 +1,48 @@
 import { Button, Typography } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
+import axios from "axios";
+import { Dispatch, SetStateAction } from "react";
 import { Address } from "../types/address";
+import getAccessToken from "../utils/getAccessToken";
 
 interface AddressTileProps {
   addresses: Array<Address>;
+  setAddress1: Dispatch<SetStateAction<string>>;
+  setAddress2: Dispatch<SetStateAction<string>>;
+  setMobile: Dispatch<SetStateAction<string>>;
+  setCity: Dispatch<SetStateAction<string>>;
+  setState: Dispatch<SetStateAction<string>>;
+  setPin: Dispatch<SetStateAction<string>>;
+  activeStep: number;
+  setActiveStep: Dispatch<SetStateAction<number>>;
+  setAddressId: Dispatch<SetStateAction<string>>;
 }
 
 export function AddressTile(props: AddressTileProps) {
-  const { addresses } = props;
+  const {
+    addresses,
+    setAddress1,
+    setAddress2,
+    setMobile,
+    setCity,
+    setState,
+    setPin,
+    activeStep,
+    setActiveStep,
+    setAddressId,
+  } = props;
+
+  const handleAddressSubmit = async (event: any) => {
+    const idx = parseInt(event.target.id);
+    setAddress1(addresses[idx].address_line1);
+    setAddress2(addresses[idx].address_line2);
+    setMobile(addresses[idx].mobile_no);
+    setCity(addresses[idx].city);
+    setState(addresses[idx].state);
+    setPin(addresses[idx].pin_code);
+    setAddressId(addresses[idx].id);
+    setActiveStep(activeStep + 1);
+  };
 
   return (
     <>
@@ -15,9 +50,12 @@ export function AddressTile(props: AddressTileProps) {
         Saved Addresses
       </Typography>
 
-      {addresses.map((address) => {
+      {addresses.map((address, idx) => {
         return (
-          <div key={address.id} style={{ display: "flex" }}>
+          <div
+            key={address.id}
+            style={{ display: "flex", marginBottom: "1rem" }}
+          >
             <Typography>
               {address.address_line1 +
                 " " +
@@ -31,7 +69,14 @@ export function AddressTile(props: AddressTileProps) {
                 " " +
                 address.mobile_no}
             </Typography>
-            <Button size="small" color="primary" variant="contained">
+            <Button
+              id={idx.toString()}
+              sx={{ borderRadius: "50%" }}
+              size="small"
+              color="primary"
+              variant="contained"
+              onClick={handleAddressSubmit}
+            >
               Next
             </Button>
           </div>

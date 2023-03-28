@@ -16,7 +16,7 @@ import getAccessToken from "../../utils/getAccessToken";
 import { sections } from "../../utils/sections";
 import { Cart } from "../../types/cart";
 import { SideDrawerCart } from "../../components/SideDrawerCart";
-
+import { SideDrawerOrder } from "../../components/SideDrawerOrder";
 const banner = {
   title: "Buy with us!",
   description: "The most trusted C2C website out there",
@@ -29,6 +29,8 @@ export default function Home() {
   const [products, setProducts] = useState<Array<ProductSeller>>([]);
   const [cart, setCart] = useState<Array<Cart>>([]);
   const [open, setOpen] = useState(false);
+  const [openOrder, setOpenOrder] = useState(false);
+  const [orders, setOrders] = useState<Array<any>>([]);
 
   const user: User | null = getUser();
 
@@ -96,9 +98,26 @@ export default function Home() {
     } catch (err) {}
   };
 
+  const getAllOrders = async () => {
+    try {
+      const access_token: string = await getAccessToken();
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/order`,
+        {
+          headers: {
+            authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+
+      setOrders(res.data.data);
+    } catch (err) {}
+  };
+
   useEffect(() => {
     getAllProducts();
     getCartItems();
+    getAllOrders();
   }, []);
 
   if (user === null || user.role === Role.SELLER) {
@@ -113,6 +132,7 @@ export default function Home() {
             sections={sections}
             cart={cart}
             setOpen={setOpen}
+            setOpenOrder={setOpenOrder}
           />
           <main>
             <Banner post={banner} />
@@ -134,6 +154,12 @@ export default function Home() {
             setOpen={setOpen}
             cart={cart}
             setCart={setCart}
+          />
+          <SideDrawerOrder
+            openOrder={openOrder}
+            setOpenOrder={setOpenOrder}
+            orders={orders}
+            setOrders={setOrders}
           />
         </Container>
         <Footer title="" description="Made with ❤️ by Akshat Sharma" />

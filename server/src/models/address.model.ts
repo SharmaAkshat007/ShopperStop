@@ -1,6 +1,6 @@
 import { PoolClient } from "pg";
 
-const addressCreateQuery = `INSERT INTO addresses(user_id, address_line1, address_line2, city, state, pin_code, mobile_no) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *`;
+const addressCreateQuery = `INSERT INTO addresses(user_id, address_line1, address_line2, city, state, pin_code, mobile_no) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id`;
 const getAllQuery = `SELECT * FROM addresses WHERE user_id=$1`;
 const deleteQuery = `DELETE FROM addresses WHERE user_id=$1 AND id=$2 RETURNING *`;
 const updateQuery = `UPDATE addresses SET address_line1=$1, address_line2=$2, city=$3, state=$4, pin_code=$5, mobile_no=$6 WHERE id=$7 AND user_id=$8 RETURNING *`;

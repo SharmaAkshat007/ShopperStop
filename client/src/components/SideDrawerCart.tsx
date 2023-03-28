@@ -1,6 +1,5 @@
 import { Button, Container, Drawer, Table, Typography } from "@mui/material";
-import axios from "axios";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useHistory } from "react-router-dom";
 import { Cart } from "../types/cart";
 import getAccessToken from "../utils/getAccessToken";

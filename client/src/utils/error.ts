@@ -13,6 +13,15 @@ const errors = {
   priceNotNumber: "Price is not a number!",
   quantityEmpty: "Quantity is empty!",
   quantityNotNumber: "Quantity is not a number!",
+  address1Empty: "Address 1 is empty!",
+  address2Empty: "Address 2 empty!",
+  mobileEmpty: "Mobile No. empty!",
+  mobileNotValid: "Mobile No. not valid!",
+  cityEmpty: "City is empty!",
+  stateEmpty: "State is empty!",
+  pinCodeEmpty: "Pin Code is empty!",
+  countryEmpty: "Country is empty!",
+  pinNotValid: "Pin Code is not valid!",
 };
 
 export default errors;

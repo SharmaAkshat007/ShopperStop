@@ -12,6 +12,7 @@ import { Badge, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { Cart } from "../types/cart";
 import { Dispatch, SetStateAction } from "react";
+import InventoryIcon from "@mui/icons-material/Inventory";
 
 interface HeaderProps {
   sections: ReadonlyArray<{
@@ -21,10 +22,11 @@ interface HeaderProps {
   title: string;
   cart: Array<Cart>;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  setOpenOrder: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Header(props: HeaderProps) {
-  const { sections, title, cart, setOpen } = props;
+  const { sections, title, cart, setOpen, setOpenOrder } = props;
   const history = useHistory();
 
   const handleSignOut = async () => {
@@ -66,8 +68,13 @@ export default function Header(props: HeaderProps) {
           </RouterLink>
         </Typography>
 
-        <IconButton sx={{ mr: "1.5rem" }}>
-          <AccountCircleIcon />
+        <IconButton
+          onClick={() => {
+            setOpenOrder(true);
+          }}
+          sx={{ mr: "1.5rem" }}
+        >
+          <InventoryIcon />
         </IconButton>
 
         <IconButton
