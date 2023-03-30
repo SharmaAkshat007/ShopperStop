@@ -13,6 +13,10 @@ import { ProductSeller } from "../types/product";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Cart } from "../types/cart";
+import { primary, secondary, tertiary } from "../utils/color";
+import getAccessToken from "../utils/getAccessToken";
+import axios from "axios";
+import { useDebounce } from "../utils/useDebounce";
 
 interface ProductTileProps {
   key: string;
@@ -44,7 +48,44 @@ export default function ProductTile(props: ProductTileProps) {
     setExpanded(!expanded);
   };
 
-  const handleAddCart = () => {
+  const addCart = async (quantity: number, product_id: string) => {
+    const access_token = await getAccessToken();
+
+    await axios.post(
+      `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/cart/add`,
+      {
+        product_id: product_id,
+        quantity: 1,
+      },
+      {
+        headers: {
+          authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+  };
+
+  const updateCart = async (quantity: number, product_id: string) => {
+    const access_token = await getAccessToken();
+
+    await axios.put(
+      `${process.env.REACT_APP_BASE_SERVER_URL_DEV}/api/v1/cart/update`,
+      {
+        product_id: product_id,
+        quantity: quantity,
+      },
+      {
+        headers: {
+          authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+  };
+
+  const deboucedAddCart = useDebounce(addCart, 1000);
+  const debouncedUpdateCart = useDebounce(updateCart, 1000);
+
+  const handleAddCart = async () => {
     let idx = -1;
     for (let i = 0; i < cart.length; i++) {
       if (cart[i].id === product.id) {
@@ -52,46 +93,58 @@ export default function ProductTile(props: ProductTileProps) {
         break;
       }
     }
-    if (idx === -1) {
-      setCart([
-        ...cart,
-        {
-          id: product.id,
-          name: product.name,
-          description: product.description,
-          quantity: 1,
-          price: product.price,
-          image_path: product.image_path,
-        },
-      ]);
-    } else {
-      const newCart = [...cart];
-      newCart[idx].quantity += 1;
-      setCart(newCart);
-    }
+    try {
+      if (idx === -1) {
+        await deboucedAddCart(1, product.id);
+        setCart([
+          ...cart,
+          {
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            quantity: 1,
+            price: product.price,
+            image_path: product.image_path,
+          },
+        ]);
+      } else {
+        const newCart = [...cart];
+        await debouncedUpdateCart(newCart[idx].quantity + 1, newCart[idx].id);
+        newCart[idx].quantity += 1;
+        setCart(newCart);
+      }
+    } catch (err) {}
   };
 
   return (
-    <Grid item xs={10} md={4}>
+    <Grid item xs={9} md={3}>
       <Card sx={{ maxWidth: 345 }}>
-        <CardHeader title={product.name} />
+        <CardHeader
+          sx={{ backgroundColor: primary, color: secondary }}
+          title={product.name}
+        />
         <CardMedia component="img" height="194" image={product.image_path} />
         <CardContent>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            sx={{ color: primary, marginBottom: "0.5rem" }}
+            variant="h5"
+          >
             {"MRP : " + product.price + " ₹"}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography sx={{ color: primary }} variant="body2">
             {"Seller Name : " + product.first_name + " " + product.last_name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {"Seller Email : " + product.email}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton onClick={handleAddCart} aria-label="add to favorites">
+          <IconButton
+            sx={{ color: primary }}
+            onClick={handleAddCart}
+            aria-label="add to favorites"
+          >
             <AddShoppingCartIcon />
           </IconButton>
           <ExpandMore
+            sx={{ color: primary }}
             expand={expanded}
             onClick={handleExpandClick}
             aria-expanded={expanded}
@@ -100,7 +153,12 @@ export default function ProductTile(props: ProductTileProps) {
             <ExpandMoreIcon />
           </ExpandMore>
         </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse
+          sx={{ color: primary }}
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
           <CardContent>
             <Typography paragraph>Description:</Typography>
             <Typography>{product.description}</Typography>

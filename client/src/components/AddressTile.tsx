@@ -3,6 +3,7 @@ import Checkbox from "@mui/material/Checkbox";
 import axios from "axios";
 import { Dispatch, SetStateAction } from "react";
 import { Address } from "../types/address";
+import { primary } from "../utils/color";
 import getAccessToken from "../utils/getAccessToken";
 
 interface AddressTileProps {
@@ -46,7 +47,11 @@ export function AddressTile(props: AddressTileProps) {
 
   return (
     <>
-      <Typography sx={{ marginBottom: "1rem" }} variant="h6" gutterBottom>
+      <Typography
+        sx={{ marginBottom: "1rem", color: primary }}
+        variant="h6"
+        gutterBottom
+      >
         Saved Addresses
       </Typography>
 
@@ -71,9 +76,13 @@ export function AddressTile(props: AddressTileProps) {
             </Typography>
             <Button
               id={idx.toString()}
-              sx={{ borderRadius: "50%" }}
+              sx={{
+                borderRadius: "50%",
+                backgroundColor: primary,
+                "&:hover": { backgroundColor: primary },
+              }}
               size="small"
-              color="primary"
+              disableElevation={true}
               variant="contained"
               onClick={handleAddressSubmit}
             >
@@ -84,7 +93,7 @@ export function AddressTile(props: AddressTileProps) {
       })}
 
       <Typography
-        sx={{ marginTop: "1rem", marginBottom: "1rem" }}
+        sx={{ marginTop: "1rem", marginBottom: "1rem", color: primary }}
         variant="h6"
         gutterBottom
       >

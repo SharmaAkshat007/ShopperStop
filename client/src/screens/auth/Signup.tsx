@@ -23,6 +23,7 @@ import {
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import ErrorBanner from "../../components/ErrorBanner";
 import axios from "axios";
+import { primary } from "../../utils/color";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState<string>("");
@@ -134,13 +135,29 @@ export default function SignUp() {
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography sx={{ color: primary }} component="h1" variant="h5">
           Sign up
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+                sx={{
+                  "& label.Mui-focused": {
+                    color: primary,
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: primary,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: primary,
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: primary,
+                    },
+                  },
+                }}
                 autoComplete="given-name"
                 name="firstName"
                 required
@@ -155,6 +172,22 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                sx={{
+                  "& label.Mui-focused": {
+                    color: primary,
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: primary,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: primary,
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: primary,
+                    },
+                  },
+                }}
                 required
                 fullWidth
                 id="lastName"
@@ -168,6 +201,22 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                sx={{
+                  "& label.Mui-focused": {
+                    color: primary,
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: primary,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: primary,
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: primary,
+                    },
+                  },
+                }}
                 required
                 fullWidth
                 id="email"
@@ -181,6 +230,22 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                sx={{
+                  "& label.Mui-focused": {
+                    color: primary,
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: primary,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: primary,
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: primary,
+                    },
+                  },
+                }}
                 required
                 fullWidth
                 name="password"
@@ -195,9 +260,10 @@ export default function SignUp() {
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="show" color="primary" />}
+                control={<Checkbox value="show" style={{ color: primary }} />}
                 label="Show Password"
                 onClick={handleShowPassword}
+                style={{ color: primary }}
               />
             </Grid>
           </Grid>
@@ -205,14 +271,25 @@ export default function SignUp() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            disableElevation={true}
+            sx={{
+              mt: 3,
+              mb: 2,
+              backgroundColor: primary,
+              "&:hover": { backgroundColor: primary },
+            }}
           >
             Sign Up
           </Button>
           <Grid container justifyContent="flex-start">
             <Grid item>
               <RouterLink to="/signin">
-                <Link variant="body2">Already have an account? Sign in</Link>
+                <Link
+                  sx={{ color: primary, textDecorationLine: "none" }}
+                  variant="body2"
+                >
+                  Already have an account? Sign in
+                </Link>
               </RouterLink>
             </Grid>
           </Grid>

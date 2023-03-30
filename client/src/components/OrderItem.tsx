@@ -6,6 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { Dispatch, SetStateAction } from "react";
+import { primary } from "../utils/color";
 import getAccessToken from "../utils/getAccessToken";
 
 interface CartItemProps {
@@ -46,13 +47,18 @@ export default function CartItem(props: CartItemProps) {
     >
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography component="div" variant="h5">
+          <Typography
+            sx={{ color: primary, marginBottom: "1rem" }}
+            component="div"
+            variant="h5"
+          >
             {item.name}
           </Typography>
           <Typography
             variant="subtitle1"
             color="text.secondary"
             component="div"
+            sx={{ color: primary, marginBottom: "1rem" }}
           >
             {item.address_line1 +
               " " +
@@ -70,6 +76,7 @@ export default function CartItem(props: CartItemProps) {
             variant="subtitle1"
             color="text.secondary"
             component="div"
+            sx={{ color: primary }}
           >
             {"Price : " + item.price + " ₹"}
           </Typography>
@@ -77,6 +84,15 @@ export default function CartItem(props: CartItemProps) {
             variant="subtitle1"
             color="text.secondary"
             component="div"
+            sx={{ color: primary }}
+          >
+            {"Quantity : " + item.quantity}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            color="text.secondary"
+            component="div"
+            sx={{ color: primary }}
           >
             Status : {item.status === false ? "Shipped" : "Delivered"}
           </Typography>
@@ -84,8 +100,12 @@ export default function CartItem(props: CartItemProps) {
         {item.status === false ? (
           <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}>
             <Button
-              color="error"
-              variant="outlined"
+              sx={{
+                backgroundColor: primary,
+                "&:hover": { backgroundColor: primary },
+              }}
+              disableElevation={true}
+              variant="contained"
               size="small"
               onClick={handleDeleteOrder}
             >

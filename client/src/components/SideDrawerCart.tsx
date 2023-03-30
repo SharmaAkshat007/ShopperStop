@@ -2,6 +2,7 @@ import { Button, Container, Drawer, Table, Typography } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { useHistory } from "react-router-dom";
 import { Cart } from "../types/cart";
+import { primary } from "../utils/color";
 import getAccessToken from "../utils/getAccessToken";
 import CartItem from "./CartItem";
 
@@ -92,6 +93,7 @@ export function SideDrawerCart(props: SideDrawerCartProps) {
                     variant="subtitle1"
                     color="text.secondary"
                     component="div"
+                    sx={{ color: primary }}
                   >
                     Total Price
                   </Typography>
@@ -101,6 +103,7 @@ export function SideDrawerCart(props: SideDrawerCartProps) {
                     variant="subtitle1"
                     color="text.secondary"
                     component="div"
+                    sx={{ color: primary }}
                   >
                     {price}
                   </Typography>
@@ -112,6 +115,7 @@ export function SideDrawerCart(props: SideDrawerCartProps) {
                     variant="subtitle1"
                     color="text.secondary"
                     component="div"
+                    sx={{ color: primary }}
                   >
                     GST (18%)
                   </Typography>
@@ -121,6 +125,7 @@ export function SideDrawerCart(props: SideDrawerCartProps) {
                     variant="subtitle1"
                     color="text.secondary"
                     component="div"
+                    sx={{ color: primary }}
                   >
                     {gst}
                   </Typography>
@@ -132,6 +137,7 @@ export function SideDrawerCart(props: SideDrawerCartProps) {
                     variant="subtitle1"
                     color="text.secondary"
                     component="div"
+                    sx={{ color: primary }}
                   >
                     Grand Total
                   </Typography>
@@ -141,6 +147,7 @@ export function SideDrawerCart(props: SideDrawerCartProps) {
                     variant="subtitle1"
                     color="text.secondary"
                     component="div"
+                    sx={{ color: primary }}
                   >
                     {grandTotal}
                   </Typography>
@@ -150,10 +157,15 @@ export function SideDrawerCart(props: SideDrawerCartProps) {
           </Table>
 
           <Button
-            color="success"
             variant="contained"
-            sx={{ width: "100%", mb: "2rem" }}
+            sx={{
+              width: "100%",
+              mb: "2rem",
+              backgroundColor: primary,
+              "&:hover": { backgroundColor: primary },
+            }}
             onClick={handleCart}
+            disableElevation={true}
           >
             Buy
           </Button>

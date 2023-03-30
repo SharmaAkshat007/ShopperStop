@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import { primary } from "../utils/color";
 
 export default function PaymentForm() {
   return (
@@ -14,6 +15,22 @@ export default function PaymentForm() {
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             required
             id="cardName"
             label="Name on card"
@@ -24,6 +41,22 @@ export default function PaymentForm() {
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             required
             id="cardNumber"
             label="Card number"
@@ -34,6 +67,22 @@ export default function PaymentForm() {
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             required
             id="expDate"
             label="Expiry date"
@@ -44,6 +93,22 @@ export default function PaymentForm() {
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             required
             id="cvv"
             label="CVV"

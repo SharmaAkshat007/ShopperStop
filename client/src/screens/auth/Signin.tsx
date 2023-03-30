@@ -25,6 +25,7 @@ import axios from "axios";
 import { getUser, setUser } from "../../utils/localStorage";
 import { User } from "../../types/user";
 import { Role } from "../../enum";
+import { primary } from "../../utils/color";
 
 export default function SignIn() {
   const [email, setEmail] = useState<string>("");
@@ -119,11 +120,8 @@ export default function SignIn() {
 
         setUser(currUser);
         setReqError("");
-        if (userRole === Role.BUYER) {
-          history.push("/home");
-        } else if (userRole === Role.SELLER) {
-          history.push("/admin");
-        }
+
+        history.push("/home");
       } catch (err: any) {
         const message: string = err.response.data.message;
         setReqError(message);
@@ -145,11 +143,27 @@ export default function SignIn() {
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography sx={{ color: primary }} component="h1" variant="h5">
           Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             margin="normal"
             required
             fullWidth
@@ -163,6 +177,22 @@ export default function SignIn() {
             onChange={handleEmailChange}
           />
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             margin="normal"
             required
             fullWidth
@@ -178,22 +208,33 @@ export default function SignIn() {
 
           <FormControlLabel
             control={
-              <Checkbox checked={role[0]} value="show" color="primary" />
+              <Checkbox
+                checked={role[0]}
+                value="show"
+                style={{ color: primary }}
+              />
             }
             label="Buyer *"
             onClick={handleBuyer}
+            sx={{ color: primary }}
           />
           <FormControlLabel
             control={
-              <Checkbox checked={role[1]} value="show" color="primary" />
+              <Checkbox
+                checked={role[1]}
+                value="show"
+                style={{ color: primary }}
+              />
             }
             label="Seller *"
             onClick={handleSeller}
+            sx={{ color: primary }}
           />
           <br />
           <FormControlLabel
-            control={<Checkbox value="show" color="primary" />}
+            control={<Checkbox value="show" style={{ color: primary }} />}
             label="Show Password"
+            sx={{ color: primary }}
             onClick={handleShowPassword}
           />
 
@@ -201,14 +242,25 @@ export default function SignIn() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            disableElevation={true}
+            sx={{
+              mt: 3,
+              mb: 2,
+              backgroundColor: primary,
+              "&:hover": { backgroundColor: primary },
+            }}
           >
             Sign In
           </Button>
           <Grid container>
             <Grid item>
               <RouterLink to="/signup">
-                <Link variant="body2">{"Don't have an account? Sign Up"}</Link>
+                <Link
+                  sx={{ color: primary, textDecorationLine: "none" }}
+                  variant="body2"
+                >
+                  {"Don't have an account? Sign Up"}
+                </Link>
               </RouterLink>
             </Grid>
           </Grid>

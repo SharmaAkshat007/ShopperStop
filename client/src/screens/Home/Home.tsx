@@ -17,11 +17,12 @@ import { sections } from "../../utils/sections";
 import { Cart } from "../../types/cart";
 import { SideDrawerCart } from "../../components/SideDrawerCart";
 import { SideDrawerOrder } from "../../components/SideDrawerOrder";
+import { Box } from "@mui/material";
 const banner = {
   title: "Buy with us!",
   description: "The most trusted C2C website out there",
   image:
-    "https://images.unsplash.com/photo-1486848538113-ce1a4923fbc5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=749&q=80",
+    "https://img.freepik.com/free-vector/mandala-design-background_79603-2154.jpg?w=1060&t=st=1680166752~exp=1680167352~hmac=f67902ec0d672c4ead001b9ebe09fcc4ec303763a6ec3e587f986babf7935d82",
   imageText: "banner",
 };
 
@@ -84,9 +85,9 @@ export default function Home() {
         }
       );
 
-      const cartData: Array<Cart> = res.data.data.map((item: Cart) => {
+      const cartData: Array<Cart> = res.data.data.map((item: any) => {
         return {
-          id: item.id,
+          id: item.product_id,
           name: item.name,
           description: item.description,
           quantity: item.quantity,
@@ -120,13 +121,13 @@ export default function Home() {
     getAllOrders();
   }, []);
 
-  if (user === null || user.role === Role.SELLER) {
+  if (user === null) {
     return <Redirect to="/signin"></Redirect>;
   } else {
     return (
       <>
         <CssBaseline />
-        <Container maxWidth="lg">
+        <div style={{ maxWidth: "100%" }}>
           <Header
             title="ShoppersStop"
             sections={sections}
@@ -136,18 +137,27 @@ export default function Home() {
           />
           <main>
             <Banner post={banner} />
-            <Container>
-              <Grid container spacing={4}>
-                {products.map((product) => (
-                  <ProductTile
-                    key={product.id}
-                    product={product}
-                    cart={cart}
-                    setCart={setCart}
-                  />
-                ))}
-              </Grid>
-            </Container>
+            <Box
+              component="main"
+              sx={{
+                flexGrow: 1,
+                height: "100vh",
+                overflow: "auto",
+              }}
+            >
+              <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
+                <Grid container>
+                  {products.map((product) => (
+                    <ProductTile
+                      key={product.id}
+                      product={product}
+                      cart={cart}
+                      setCart={setCart}
+                    />
+                  ))}
+                </Grid>
+              </div>
+            </Box>
           </main>
           <SideDrawerCart
             open={open}
@@ -161,7 +171,7 @@ export default function Home() {
             orders={orders}
             setOrders={setOrders}
           />
-        </Container>
+        </div>
         <Footer title="" description="Made with ❤️ by Akshat Sharma" />
       </>
     );

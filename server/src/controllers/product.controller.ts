@@ -12,15 +12,19 @@ import pool from "../db/config";
 import { ProductSeller } from "../models/product.model";
 
 export const getProducts = async (
-  req: Request,
+  req: UserRequest,
   res: Response,
   next: NextFunction
 ) => {
   let client: PoolClient;
+  const user_id: string = req.user_data.id;
   try {
     client = await pool.connect();
     await client.query("BEGIN");
-    const result: Array<ProductSeller> = await Product.getAllProducts(client);
+    const result: Array<ProductSeller> = await Product.getAllProducts(
+      client,
+      user_id
+    );
 
     await client.query("COMMIT");
     return res.status(200).json({

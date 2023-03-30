@@ -5,6 +5,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Grid from "@mui/material/Grid";
 import { Cart } from "../types/cart";
+import { primary } from "../utils/color";
 
 interface ReviewInterface {
   cart: Array<Cart>;
@@ -32,7 +33,7 @@ export default function Review(props: ReviewInterface) {
   let pricegst = price + price * 0.18;
   return (
     <React.Fragment>
-      <Typography variant="h6" gutterBottom>
+      <Typography style={{ color: primary }} variant="h6" gutterBottom>
         Order summary
       </Typography>
       <List disablePadding>
@@ -65,7 +66,12 @@ export default function Review(props: ReviewInterface) {
       </List>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+          <Typography
+            style={{ color: primary }}
+            variant="h6"
+            gutterBottom
+            sx={{ mt: 2 }}
+          >
             Shipping
           </Typography>
 

@@ -7,32 +7,6 @@ import dotenv from "dotenv";
 import { Role } from "../enums";
 dotenv.config();
 
-export const checkBuyer = async (
-  req: UserRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  const role = req.user_data.role;
-  if (role === Role.buyer) {
-    next();
-  } else {
-    return next(new Error(400, "Not a buyer"));
-  }
-};
-
-export const checkSeller = (
-  req: UserRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  const role = req.user_data.role;
-  if (role === Role.seller) {
-    next();
-  } else {
-    return next(new Error(400, "Not a seller"));
-  }
-};
-
 export const verifyToken = async (
   req: UserRequest,
   res: Response,

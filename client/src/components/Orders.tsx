@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
 import getAccessToken from "../utils/getAccessToken";
 import Title from "./Title";
 import { Order } from "../types/order";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
+import { primary } from "../utils/color";
 
 export default function Orders() {
   const [orders, setOrders] = useState<Array<Order>>();
@@ -70,18 +71,26 @@ export default function Orders() {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-        <Title>Recent Orders</Title>
+        <Typography variant="h6" sx={{ color: primary }}>
+          Recent Orders
+        </Typography>
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Product Name</TableCell>
-              <TableCell> Buyer Name</TableCell>
-              <TableCell>Ship To</TableCell>
-              <TableCell>Mobile No.</TableCell>
-              <TableCell>Quantity</TableCell>
-              <TableCell align="right">Sale Amount</TableCell>
-              <TableCell align="right">Delivered</TableCell>
-              <TableCell align="right">Change Status</TableCell>
+              <TableCell sx={{ color: primary }}>Product Name</TableCell>
+              <TableCell sx={{ color: primary }}> Buyer Name</TableCell>
+              <TableCell sx={{ color: primary }}>Ship To</TableCell>
+              <TableCell sx={{ color: primary }}>Mobile No.</TableCell>
+              <TableCell sx={{ color: primary }}>Quantity</TableCell>
+              <TableCell sx={{ color: primary }} align="right">
+                Sale Amount
+              </TableCell>
+              <TableCell sx={{ color: primary }} align="right">
+                Delivered
+              </TableCell>
+              <TableCell sx={{ color: primary }} align="right">
+                Change Status
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -112,8 +121,12 @@ export default function Orders() {
                   <Button
                     id={order.id}
                     size="small"
-                    variant="outlined"
-                    color="success"
+                    variant="contained"
+                    disableElevation={true}
+                    sx={{
+                      backgroundColor: primary,
+                      "&:hover": { backgroundColor: primary },
+                    }}
                     onClick={handleStatusChange}
                   >
                     Delivered

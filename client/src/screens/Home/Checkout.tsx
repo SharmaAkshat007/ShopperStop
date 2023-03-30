@@ -12,14 +12,17 @@ import AddressForm from "../../components/AddressForm";
 import PaymentForm from "../../components/PaymentForm";
 import Review from "../../components/Review";
 import Footer from "../../components/Footer";
-import { useHistory, useLocation } from "react-router-dom";
+import { Redirect, useHistory, useLocation } from "react-router-dom";
 import { Cart } from "../../types/cart";
-import darkTheme from "../../utils/theme";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Address } from "../../types/address";
 import getAccessToken from "../../utils/getAccessToken";
 import axios from "axios";
 import errors from "../../utils/error";
+import { primary, secondary } from "../../utils/color";
+import { User } from "../../types/user";
+import { getUser } from "../../utils/localStorage";
+import { Role } from "../../enum";
 
 const steps = ["Shipping address", "Payment details", "Review your order"];
 
@@ -187,18 +190,52 @@ export default function Checkout(props: any) {
 
   console.log(address1, address2, city, state, pin, mobile);
   console.log(addressId);
+  const user: User | null = getUser();
+
+  if (user === null) {
+    return <Redirect to="/signin"></Redirect>;
+  }
+
   return (
-    <ThemeProvider theme={darkTheme}>
+    <>
       <CssBaseline />
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper
           variant="outlined"
           sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
         >
-          <Typography component="h1" variant="h4" align="center">
+          <Typography
+            sx={{ color: primary }}
+            component="h1"
+            variant="h4"
+            align="center"
+          >
             Checkout
           </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+          <Stepper
+            sx={{
+              "& .MuiStepLabel-root .Mui-completed": {
+                color: primary, // circle color (COMPLETED)
+              },
+              "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel":
+                {
+                  color: primary, // Just text label (COMPLETED)
+                },
+              "& .MuiStepLabel-root .Mui-active": {
+                color: primary, // circle color (ACTIVE)
+              },
+              "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel":
+                {
+                  color: primary, // Just text label (ACTIVE)
+                },
+              "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
+                fill: secondary, // circle's number (ACTIVE)
+              },
+              pt: 3,
+              pb: 5,
+            }}
+            activeStep={activeStep}
+          >
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
@@ -207,7 +244,7 @@ export default function Checkout(props: any) {
           </Stepper>
           {activeStep === steps.length ? (
             <>
-              <Typography variant="h5" gutterBottom>
+              <Typography style={{ color: primary }} variant="h5" gutterBottom>
                 Thank you for your order.
               </Typography>
               <Typography variant="subtitle1">
@@ -222,6 +259,8 @@ export default function Checkout(props: any) {
                 onClick={() => {
                   history.push("/home");
                 }}
+                disableElevation={true}
+                style={{ backgroundColor: primary }}
               >
                 Home
               </Button>
@@ -253,14 +292,23 @@ export default function Checkout(props: any) {
               )}
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                 {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                  <Button
+                    onClick={handleBack}
+                    sx={{ color: primary, mt: 3, ml: 1 }}
+                  >
                     Back
                   </Button>
                 )}
                 <Button
                   variant="contained"
                   onClick={handleNext}
-                  sx={{ mt: 3, ml: 1 }}
+                  disableElevation={true}
+                  sx={{
+                    mt: 3,
+                    ml: 1,
+                    backgroundColor: primary,
+                    "&:hover": { backgroundColor: primary },
+                  }}
                 >
                   {activeStep === steps.length - 1 ? "Place order" : "Next"}
                 </Button>
@@ -270,6 +318,6 @@ export default function Checkout(props: any) {
         </Paper>
         <Footer title="" description="Made with ❤️ by Akshat Sharma" />
       </Container>
-    </ThemeProvider>
+    </>
   );
 }

@@ -13,6 +13,7 @@ import { Product } from "../types/product";
 import getAccessToken from "../utils/getAccessToken";
 import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
+import { primary, secondary } from "../utils/color";
 
 interface AdminProductTileProps {
   key: string;
@@ -84,26 +85,46 @@ export default function AdminProductTile(props: AdminProductTileProps) {
   return (
     <Grid item xs={10} md={4}>
       <Card sx={{ maxWidth: 345 }}>
-        <CardHeader title={product.name} />
+        <CardHeader
+          sx={{ backgroundColor: primary, color: secondary }}
+          title={product.name}
+        />
         <CardMedia component="img" height="194" image={product.image_path} />
         <CardContent>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            sx={{ color: primary, marginBottom: "0.5rem" }}
+            variant="h5"
+          >
             {"MRP : " + product.price + " ₹"}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" sx={{ color: primary }}>
             {"Quantity : " + product.quantity}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <Button id={product.id} variant="outlined" onClick={handleClickOpen}>
+          <Button
+            id={product.id}
+            variant="contained"
+            disableElevation={true}
+            sx={{
+              backgroundColor: primary,
+              "&:hover": { backgroundColor: primary },
+            }}
+            onClick={handleClickOpen}
+          >
             Update
           </Button>
           <Button
             id={product.id}
-            sx={{ marginLeft: "1rem" }}
             color="error"
-            variant="outlined"
+            variant="contained"
             onClick={deleteProduct}
+            disableElevation={true}
+            sx={{
+              marginLeft: "1rem",
+              backgroundColor: primary,
+              "&:hover": { backgroundColor: primary },
+            }}
           >
             Delete
           </Button>
@@ -113,11 +134,21 @@ export default function AdminProductTile(props: AdminProductTileProps) {
             onClick={handleExpandClick}
             aria-expanded={expanded}
             aria-label="show more"
+            sx={{
+              color: primary,
+            }}
           >
             <ExpandMoreIcon />
           </ExpandMore>
         </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse
+          sx={{
+            color: primary,
+          }}
+          in={expanded}
+          timeout="auto"
+          unmountOnExit
+        >
           <CardContent>
             <Typography paragraph>Description:</Typography>
             <Typography>{product.description}</Typography>

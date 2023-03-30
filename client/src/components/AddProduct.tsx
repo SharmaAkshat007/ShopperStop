@@ -7,6 +7,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import errors from "../utils/error";
 import axios from "axios";
 import getAccessToken from "../utils/getAccessToken";
+import { primary } from "../utils/color";
 
 export default function AddProduct(props: {
   panel: number;
@@ -122,12 +123,32 @@ export default function AddProduct(props: {
     <>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-          <Typography variant="h6" gutterBottom sx={{ marginBottom: "2rem" }}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ marginBottom: "2rem", color: primary }}
+          >
             Add Product
           </Typography>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <TextField
+                sx={{
+                  "& label.Mui-focused": {
+                    color: primary,
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: primary,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: primary,
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: primary,
+                    },
+                  },
+                }}
                 required
                 id="name"
                 name="name"
@@ -142,6 +163,22 @@ export default function AddProduct(props: {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                sx={{
+                  "& label.Mui-focused": {
+                    color: primary,
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: primary,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: primary,
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: primary,
+                    },
+                  },
+                }}
                 required
                 id="description"
                 name="description"
@@ -156,6 +193,22 @@ export default function AddProduct(props: {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                sx={{
+                  "& label.Mui-focused": {
+                    color: primary,
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: primary,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: primary,
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: primary,
+                    },
+                  },
+                }}
                 required
                 id="price"
                 name="price"
@@ -176,6 +229,22 @@ export default function AddProduct(props: {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                sx={{
+                  "& label.Mui-focused": {
+                    color: primary,
+                  },
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: primary,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&:hover fieldset": {
+                      borderColor: primary,
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: primary,
+                    },
+                  },
+                }}
                 id="quantity"
                 name="quantity"
                 label="Quanitity"
@@ -197,7 +266,15 @@ export default function AddProduct(props: {
             </Grid>
           </Grid>
           <Grid item xs={12} sx={{ marginTop: "2rem" }}>
-            <Button variant="contained" component="label">
+            <Button
+              sx={{
+                backgroundColor: primary,
+                "&:hover": { backgroundColor: primary },
+              }}
+              disableElevation={true}
+              variant="contained"
+              component="label"
+            >
               Upload Product Image
               <input
                 hidden
@@ -213,23 +290,19 @@ export default function AddProduct(props: {
             >
               {file && `${file.name}`}
             </Typography>
-          </Grid>
-
-          <Box
-            sx={{
-              marginTop: "2rem",
-              display: "flex",
-              justifyContent: "flex-start",
-            }}
-          >
             <Button
               variant="contained"
-              sx={{ mt: 3, ml: 1 }}
+              disableElevation={true}
+              sx={{
+                marginTop: "2rem",
+                backgroundColor: primary,
+                "&:hover": { backgroundColor: primary },
+              }}
               onClick={handleSubmit}
             >
               Add Product
             </Button>
-          </Box>
+          </Grid>
         </Paper>
       </Container>
     </>

@@ -7,6 +7,7 @@ import getAccessToken from "../utils/getAccessToken";
 import axios from "axios";
 import { Box, Container } from "@mui/system";
 import { Grid, Typography } from "@mui/material";
+import { primary } from "../utils/color";
 
 interface FormDialogProps {
   open: boolean;
@@ -140,12 +141,32 @@ function UpdateProduct(props: UpdateProductProps) {
   return (
     <>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Typography variant="h6" gutterBottom sx={{ marginBottom: "2rem" }}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          sx={{ marginBottom: "2rem", color: primary }}
+        >
           Update Product
         </Typography>
         <Grid container spacing={5}>
           <Grid item xs={12}>
             <TextField
+              sx={{
+                "& label.Mui-focused": {
+                  color: primary,
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: primary,
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&:hover fieldset": {
+                    borderColor: primary,
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: primary,
+                  },
+                },
+              }}
               required
               id="name"
               name="name"
@@ -160,6 +181,22 @@ function UpdateProduct(props: UpdateProductProps) {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              sx={{
+                "& label.Mui-focused": {
+                  color: primary,
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: primary,
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&:hover fieldset": {
+                    borderColor: primary,
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: primary,
+                  },
+                },
+              }}
               required
               id="description"
               name="description"
@@ -174,6 +211,22 @@ function UpdateProduct(props: UpdateProductProps) {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              sx={{
+                "& label.Mui-focused": {
+                  color: primary,
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: primary,
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&:hover fieldset": {
+                    borderColor: primary,
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: primary,
+                  },
+                },
+              }}
               required
               id="price"
               name="price"
@@ -194,6 +247,22 @@ function UpdateProduct(props: UpdateProductProps) {
           </Grid>
           <Grid item xs={12}>
             <TextField
+              sx={{
+                "& label.Mui-focused": {
+                  color: primary,
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottomColor: primary,
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&:hover fieldset": {
+                    borderColor: primary,
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: primary,
+                  },
+                },
+              }}
               id="quantity"
               name="quantity"
               label="Quanitity"
@@ -215,7 +284,15 @@ function UpdateProduct(props: UpdateProductProps) {
           </Grid>
         </Grid>
         <Grid item xs={12} sx={{ marginTop: "2rem" }}>
-          <Button variant="contained" component="label">
+          <Button
+            sx={{
+              backgroundColor: primary,
+              "&:hover": { backgroundColor: primary },
+            }}
+            variant="contained"
+            component="label"
+            disableElevation={true}
+          >
             Upload Product Image
             <input
               hidden
@@ -231,23 +308,19 @@ function UpdateProduct(props: UpdateProductProps) {
           >
             {file && `${file.name}`}
           </Typography>
-        </Grid>
-
-        <Box
-          sx={{
-            marginTop: "2rem",
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
-        >
           <Button
             variant="contained"
-            sx={{ mt: 3, ml: 1 }}
+            sx={{
+              mt: "1rem",
+              backgroundColor: primary,
+              "&:hover": { backgroundColor: primary },
+            }}
             onClick={handleSubmit}
+            disableElevation={true}
           >
             Update Product
           </Button>
-        </Box>
+        </Grid>
       </Container>
     </>
   );

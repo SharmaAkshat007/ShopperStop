@@ -5,6 +5,7 @@ import { Address } from "../types/address";
 import { AddressTile } from "./AddressTile";
 import { Dispatch, SetStateAction, useState } from "react";
 import errors from "../utils/error";
+import { primary } from "../utils/color";
 
 interface AddressFormProps {
   addresses: Array<Address>;
@@ -125,12 +126,28 @@ export default function AddressForm(props: AddressFormProps) {
       ) : (
         <></>
       )}
-      <Typography variant="h6" gutterBottom>
+      <Typography sx={{ color: primary }} variant="h6" gutterBottom>
         New Address
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             required
             id="address1"
             name="address1"
@@ -145,6 +162,22 @@ export default function AddressForm(props: AddressFormProps) {
         </Grid>
         <Grid item xs={12}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             id="address2"
             name="address2"
             label="Address line 2"
@@ -158,6 +191,22 @@ export default function AddressForm(props: AddressFormProps) {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             required
             id="mobile"
             name="mobile"
@@ -178,6 +227,22 @@ export default function AddressForm(props: AddressFormProps) {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             required
             id="city"
             name="city"
@@ -193,6 +258,22 @@ export default function AddressForm(props: AddressFormProps) {
 
         <Grid item xs={12} sm={6}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             id="state"
             name="state"
             label="State/Province/Region"
@@ -205,6 +286,22 @@ export default function AddressForm(props: AddressFormProps) {
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            sx={{
+              "& label.Mui-focused": {
+                color: primary,
+              },
+              "& .MuiInput-underline:after": {
+                borderBottomColor: primary,
+              },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: primary,
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: primary,
+                },
+              },
+            }}
             required
             id="zip"
             name="zip"
