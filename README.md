@@ -6,5 +6,6 @@
 - Other Technologies: Git, Bitbucket, Docker, Postman, RedisInsight-V2, Postbird, Visual Studio Code
 
 **Setup Steps**
-Client: Run **npm run start** in client directory
-Server: Install Docker then run **npm run pg-up**, **npm run redis-up** and **npm run start**
+
+- Client: Run **npm run start** in client directory
+- Server: Install Docker then run **npm run pg-up**, **npm run redis-up** and **npm run start** in server directory
